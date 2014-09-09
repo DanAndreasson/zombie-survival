@@ -1,4 +1,4 @@
-package com.codescrew.zombiesurvival;
+package com.codescrew.zombiesurvival.main;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -25,3 +25,4 @@ public class Game extends ApplicationAdapter {
 		batch.end();
 	}
 }
+
