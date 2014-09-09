@@ -13,7 +13,7 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("zombie10.png");
+		img = new Texture("badlogic.png");
 	}
 
     @Override
