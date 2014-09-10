@@ -8,15 +8,22 @@ import com.codescrew.zombiesurvival.main.Game;
 
 public class Player extends B2DSprite {
 
+    public static final float horizontalSpeed = 1.7f;
     private int numCrystals;
     private int totalCrystals;
+
+    private int verticalForce;
+    private float bodyMass;
 
     public Player(Body body) {
 
         super(body);
 
-        Texture tex = Game.res.getTexture("bunny");
-        TextureRegion[] sprites = new TextureRegion[4];
+        verticalForce = 200;  // If higher then jump higher
+        bodyMass = 1;
+
+        Texture tex = Game.res.getTexture("zombie");
+        TextureRegion[] sprites = new TextureRegion[3];
         for(int i = 0; i < sprites.length; i++) {
             sprites[i] = new TextureRegion(tex, i * 32, 0, 32, 32);
         }
@@ -28,10 +35,16 @@ public class Player extends B2DSprite {
 
     }
 
-    public void collectCrystal() { numCrystals++; }
-    public int getNumCrystals() { return numCrystals; }
+    public void collectBrain() { ++numCrystals; }
+    public int getNumBrains() { return numCrystals; }
 
-    public void setTotalCrystals(int i) { totalCrystals = i; }
-    public int getTotalCrystals() { return totalCrystals; }
+    public void setTotalBrains(int i) { totalCrystals = i; }
+    public int getTotalBrains() { return totalCrystals; }
 
+    public int getVerticalForce() { return verticalForce; }
+
+
+    public float getBodyMass() {
+        return bodyMass;
+    }
 }

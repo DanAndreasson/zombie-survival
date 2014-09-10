@@ -50,13 +50,13 @@ public class HUD {
 
         // draw blocks
         short bits = player.getBody().getFixtureList().first().getFilterData().maskBits;
-        if((bits & B2DVars.BIT_RED_BLOCK) != 0) {
+        if((bits & B2DVars.BIT_WALKABLE_BLOCK) != 0) {
             sb.draw(blocks[0], 40, 208);
         }
-        else if((bits & B2DVars.BIT_GREEN_BLOCK) != 0) {
+        else if((bits & B2DVars.BIT_WALKABLE_BLOCK) != 0) {
             sb.draw(blocks[1], 40, 208);
         }
-        else if((bits & B2DVars.BIT_BLUE_BLOCK) != 0) {
+        else if((bits & B2DVars.BIT_WALKABLE_BLOCK) != 0) {
             sb.draw(blocks[2], 40, 208);
         }
 
@@ -64,7 +64,7 @@ public class HUD {
         sb.draw(crystal, 100, 208);
 
         // draw crystal amount
-        drawString(sb, player.getNumCrystals() + " / " + player.getTotalCrystals(), 132, 211);
+        drawString(sb, player.getNumBrains() + " / " + player.getTotalBrains(), 132, 211);
 
         sb.end();
 

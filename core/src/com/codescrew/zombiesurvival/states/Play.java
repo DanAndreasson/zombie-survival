@@ -7,8 +7,6 @@ import static com.codescrew.zombiesurvival.handlers.B2DVars.PPM;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -18,8 +16,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -35,9 +31,7 @@ import com.codescrew.zombiesurvival.handlers.BoundedCamera;
 import com.codescrew.zombiesurvival.handlers.GameStateManager;
 import com.codescrew.zombiesurvival.main.Game;
 
-/**
- * Created by raimat on 2014-09-09.
- */
+
 public class Play extends GameState {
 
     private boolean debug = false;
@@ -82,7 +76,7 @@ public class Play extends GameState {
 
         // create crystals
         //createCrystals();
-        //player.setTotalCrystals(crystals.size);
+        //player.setTotalBrains(crystals.size);
 
         // create spikes
         //createSpikes();
@@ -118,7 +112,7 @@ public class Play extends GameState {
         bdef.type = BodyDef.BodyType.DynamicBody;
         bdef.position.set(60 / PPM, 120 / PPM);
         bdef.fixedRotation = true;
-        bdef.linearVelocity.set(1f, 0f);
+        bdef.linearVelocity.set(Player.horizontalSpeed, 0f);
 
         // create body from bodydef
         Body body = world.createBody(bdef);
@@ -133,7 +127,7 @@ public class Play extends GameState {
         fdef.density = 1;
         fdef.friction = 0;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_RED_BLOCK | B2DVars.BIT_CRYSTAL | B2DVars.BIT_SPIKE;
+        fdef.filter.maskBits = B2DVars.BIT_WALKABLE_BLOCK | B2DVars.BIT_CRYSTAL | B2DVars.BIT_SPIKE;
 
         // create player collision box fixture
         body.createFixture(fdef);
@@ -147,10 +141,10 @@ public class Play extends GameState {
         fdef.shape = shape;
         fdef.isSensor = true;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_RED_BLOCK;
+        fdef.filter.maskBits = B2DVars.BIT_WALKABLE_BLOCK;
 
         // create player foot fixture
-        body.createFixture(fdef).setUserData("foot");;
+        body.createFixture(fdef).setUserData("foot");
         shape.dispose();
 
         // create new player
@@ -159,7 +153,7 @@ public class Play extends GameState {
 
         // final tweaks, manually set the player body mass to 1 kg
         MassData md = body.getMassData();
-        md.mass = 1;
+        md.mass = player.getBodyMass();
         body.setMassData(md);
 
         // i need a ratio of 0.005
@@ -189,11 +183,11 @@ public class Play extends GameState {
         // read each of the "red" "green" and "blue" layers
         TiledMapTileLayer layer;
         layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
-        createBlocks(layer, B2DVars.BIT_RED_BLOCK);
+        createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
         layer = (TiledMapTileLayer) tileMap.getLayers().get("green");
-        createBlocks(layer, B2DVars.BIT_GREEN_BLOCK);
+        createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
         layer = (TiledMapTileLayer) tileMap.getLayers().get("blue");
-        createBlocks(layer, B2DVars.BIT_BLUE_BLOCK);
+        createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
 
     }
 
@@ -320,66 +314,18 @@ public class Play extends GameState {
     private void playerJump() {
         if(cl.playerCanJump()) {
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-            player.getBody().applyForceToCenter(0, 200, true);
+            player.getBody().applyForceToCenter(0, player.getVerticalForce(), true);
             Game.res.getSound("jump").play();
         }
     }
 
-    /**
-     * Switch player mask bits to next block.
-     */
-    private void switchBlocks() {
 
-        // get player foot mask bits
-        Filter filter = player.getBody().getFixtureList().get(1).getFilterData();
-        short bits = filter.maskBits;
-
-        // switch to next block bit
-        // red -> green -> blue
-        if(bits == B2DVars.BIT_RED_BLOCK) {
-            bits = B2DVars.BIT_GREEN_BLOCK;
-        }
-        else if(bits == B2DVars.BIT_GREEN_BLOCK) {
-            bits = B2DVars.BIT_BLUE_BLOCK;
-        }
-        else if(bits == B2DVars.BIT_BLUE_BLOCK) {
-            bits = B2DVars.BIT_RED_BLOCK;
-        }
-
-        // set player foot mask bits
-        filter.maskBits = bits;
-        player.getBody().getFixtureList().get(1).setFilterData(filter);
-
-        // set player mask bits
-        bits |= B2DVars.BIT_CRYSTAL | B2DVars.BIT_SPIKE;
-        filter.maskBits = bits;
-        player.getBody().getFixtureList().get(0).setFilterData(filter);
-
-        // play sound
-        Game.res.getSound("changeblock").play();
-
-    }
 
     public void handleInput() {
 
-        // keyboard input
-        if(BBInput.isPressed(BBInput.BUTTON1)) {
-            playerJump();
-        }
-        if(BBInput.isPressed(BBInput.BUTTON2)) {
-            switchBlocks();
-        }
-
-        // mouse/touch input for android
-        // left side of screen to switch blocks
-        // right side of screen to jump
+        // Touches screen
         if(BBInput.isPressed()) {
-            if(BBInput.x < Gdx.graphics.getWidth() / 2) {
-                switchBlocks();
-            }
-            else {
-                playerJump();
-            }
+            playerJump();
         }
 
     }
@@ -398,7 +344,7 @@ public class Play extends GameState {
             Body b = bodies.get(i);
             //crystals.removeValue((Crystal) b.getUserData(), true);
             world.destroyBody(bodies.get(i));
-            player.collectCrystal();
+            player.collectBrain();
             Game.res.getSound("crystal").play();
         }
         bodies.clear();
@@ -417,9 +363,9 @@ public class Play extends GameState {
             Game.res.getSound("hit").play();
             gsm.setState(GameStateManager.MENU);
         }
+
         if(player.getBody().getLinearVelocity().x < 0.001f) {
-            Game.res.getSound("hit").play();
-            gsm.setState(GameStateManager.MENU);
+            player.getBody().setLinearVelocity(Player.horizontalSpeed, player.getBody().getLinearVelocity().y);
         }
         if(cl.isPlayerDead()) {
             Game.res.getSound("hit").play();

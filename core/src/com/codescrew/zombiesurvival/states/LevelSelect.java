@@ -18,7 +18,7 @@ public class LevelSelect extends GameState {
 
         super(gsm);
 
-        reg = new TextureRegion(Game.res.getTexture("bgs"), 0, 0, 320, 240);
+        reg = new TextureRegion(Game.res.getTexture("bgs"), 0, 0, Game.V_WIDTH, Game.V_HEIGHT);
 
         TextureRegion buttonReg = new TextureRegion(Game.res.getTexture("hud"), 0, 0, 32, 32);
         buttons = new GameButton[5][5];
@@ -70,7 +70,6 @@ public class LevelSelect extends GameState {
     }
 
     public void dispose() {
-        // everything is in the resource manager com.neet.blockbunny.handlers.Content
     }
 
 }

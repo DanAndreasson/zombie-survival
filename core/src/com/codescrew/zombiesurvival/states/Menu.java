@@ -21,9 +21,7 @@ import com.codescrew.zombiesurvival.handlers.GameButton;
 import com.codescrew.zombiesurvival.handlers.GameStateManager;
 import com.codescrew.zombiesurvival.main.Game;
 
-/**
- * Created by raimat on 2014-09-09.
- */
+
 public class Menu extends GameState {
 
     private boolean debug = false;
@@ -45,8 +43,8 @@ public class Menu extends GameState {
         bg = new Background(new TextureRegion(tex), cam, 1f);
         bg.setVector(-20, 0);
 
-        tex = Game.res.getTexture("bunny");
-        TextureRegion[] reg = new TextureRegion[4];
+        tex = Game.res.getTexture("zombie");
+        TextureRegion[] reg = new TextureRegion[3];
         for(int i = 0; i < reg.length; i++) {
             reg[i] = new TextureRegion(tex, i * 32, 0, 32, 32);
         }
@@ -103,11 +101,11 @@ public class Menu extends GameState {
         blocks = new Array<B2DSprite>();
 
         int[][] spellBlock = {
-                {1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1},
-                {1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0},
-                {1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0},
-                {1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0},
-                {1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1}
+                {1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1},
+                {0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0},
+                {0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0},
+                {1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0},
+                {1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1}
         };
         int[][] spellBunny = {
                 {1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1},

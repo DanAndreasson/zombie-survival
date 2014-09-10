@@ -1,8 +1,5 @@
 package com.codescrew.zombiesurvival.handlers;
 
-/**
- * Created by raimat on 2014-09-09.
- */
 public class BBInput {
 
     public static int x;
@@ -23,18 +20,12 @@ public class BBInput {
 
     public static void update() {
         pdown = down;
-        for(int i = 0; i < NUM_KEYS; i++) {
-            pkeys[i] = keys[i];
-        }
+        System.arraycopy(keys, 0, pkeys, 0, NUM_KEYS);
     }
 
-    public static boolean isDown() { return down; }
     public static boolean isPressed() { return down && !pdown; }
-    public static boolean isReleased() { return !down && pdown; }
 
     public static void setKey(int i, boolean b) { keys[i] = b; }
-    public static boolean isDown(int i) { return keys[i]; }
-    public static boolean isPressed(int i) { return keys[i] && !pkeys[i]; }
 
 }
 

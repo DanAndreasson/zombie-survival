@@ -29,14 +29,13 @@ public class Game extends ApplicationAdapter {
 
     public void create() {
 
-        //Texture.setEnforcePotImages(false);
         Gdx.input.setInputProcessor(new BBInputProcessor());
 
         res = new Content();
         res.loadTexture("images/menu.png");
         res.loadTexture("images/bgs.png");
         res.loadTexture("images/hud.png");
-        res.loadTexture("images/bunny.png");
+        res.loadTexture("images/zombie.png");
         res.loadTexture("images/crystal.png");
         res.loadTexture("images/spikes.png");
 
