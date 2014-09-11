@@ -14,9 +14,10 @@ import com.codescrew.zombiesurvival.handlers.GameStateManager;
 public class Game extends ApplicationAdapter {
 
     public static final String TITLE = "Zombie Survival?!";
-    public static final int V_WIDTH = 320;
-    public static final int V_HEIGHT = 240;
-    public static final int SCALE = 2;
+    public static final int SCALE = 1;
+    public static final int V_WIDTH = 320*SCALE;
+    public static final int V_HEIGHT = 240*SCALE;
+
     public static final float STEP = 1 / 60f;
 
     private SpriteBatch sb;

@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.codescrew.zombiesurvival.main.Game;
 
-/**
- * Created by raimat on 2014-09-09.
- */
+
 public class Background {
 
     private TextureRegion image;

@@ -86,6 +86,9 @@ public class Play extends GameState {
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
         TextureRegion clouds = new TextureRegion(bgs, 0, 240, 320, 240);
         TextureRegion mountains = new TextureRegion(bgs, 0, 480, 320, 240);
+       // TextureRegion sky = new TextureRegion(bgs, 0, 0, Game.V_WIDTH, Game.V_HEIGHT);
+        //TextureRegion clouds = new TextureRegion(bgs, 0, Game.V_HEIGHT, Game.V_WIDTH, Game.V_HEIGHT);
+        //TextureRegion mountains = new TextureRegion(bgs, 0, Game.V_WIDTH*2, Game.V_WIDTH, Game.V_HEIGHT);
         backgrounds = new Background[3];
         backgrounds[0] = new Background(sky, cam, 0f);
         backgrounds[1] = new Background(clouds, cam, 0.1f);
@@ -96,7 +99,7 @@ public class Play extends GameState {
 
         // set up box2d cam
         b2dCam = new BoundedCamera();
-        b2dCam.setToOrtho(false, Game.V_WIDTH / PPM, Game.V_HEIGHT / PPM);
+        b2dCam.setToOrtho(false, (Game.V_WIDTH / PPM)*2, (Game.V_HEIGHT / PPM)*2);
         b2dCam.setBounds(0, (tileMapWidth * tileSize) / PPM, 0, (tileMapHeight * tileSize) / PPM);
 
     }
@@ -110,7 +113,8 @@ public class Play extends GameState {
         // create bodydef
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(60 / PPM, 120 / PPM);
+        bdef.position.set(60 / PPM, 800 / PPM);
+
         bdef.fixedRotation = true;
         bdef.linearVelocity.set(Player.horizontalSpeed, 0f);
 
@@ -173,8 +177,12 @@ public class Play extends GameState {
         }
         catch(Exception e) {
             System.out.println("Cannot find file: maps/level" + level + ".tmx");
+            e.printStackTrace();
             Gdx.app.exit();
         }
+        Gdx.app.log("Play", (tileMap == null)+"");
+        Gdx.app.log("Play", (tileMap.getProperties() == null)+"");
+        Gdx.app.log("Play", (tileMap.getProperties().get("width") == null)+"");
         tileMapWidth = (Integer) tileMap.getProperties().get("width");
         tileMapHeight = (Integer) tileMap.getProperties().get("height");
         tileSize = (Integer) tileMap.getProperties().get("tilewidth");
@@ -183,6 +191,10 @@ public class Play extends GameState {
         // read each of the "red" "green" and "blue" layers
         TiledMapTileLayer layer;
         layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
+        createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("grass");
+        createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("ground");
         createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
         layer = (TiledMapTileLayer) tileMap.getLayers().get("green");
         createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
@@ -200,6 +212,8 @@ public class Play extends GameState {
      * @param bits category bits assigned to fixtures
      */
     private void createBlocks(TiledMapTileLayer layer, short bits) {
+
+        if (layer == null) return;
 
         // tile size
         float ts = layer.getTileWidth();
@@ -387,7 +401,7 @@ public class Play extends GameState {
     public void render() {
 
         // camera follow player
-        cam.setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, Game.V_HEIGHT / 2);
+        cam.setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, player.getPosition().y * PPM + Game.V_HEIGHT / 3);
         cam.update();
 
         // draw bgs
