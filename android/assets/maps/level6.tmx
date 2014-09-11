@@ -16,9 +16,9 @@
    eJzt09EKgCAMheFdBoXv/7jRnWxORS9a6/9AULDcDioCAIisvF1AQGRiZczkUEPUfGQ3k9b5kej6ZmqtMzknv9HneevIerUWZ97Ltfe/6Pem5r0RLxNtpdfo2bT6LTKfSUZkYu2+nYzIxCITa6ZfMlnbk8nT7zUYf8sEAAAAAL7kBsppA5o=
   </data>
  </layer>
- <layer name="blue" width="69" height="32" visible="0">
+ <layer name="blue" width="69" height="32">
   <data encoding="base64" compression="zlib">
-   eJztw0ENAAAMA6FzUP9u52FvSFg1VVVVVVVVVVV9PmAXgWE=
+   eJzt0DENADAMwLAyGH+2A+Cnf2MpBDJzx1t2SU/UE/VEPVFP1BP1RD1RT9QT9UQ9UU/UE/VEPVFP1BP1RD1RT9QT9UQ9UU/UE/VEPVFPtH1S9gFPMxY2
   </data>
  </layer>
  <objectgroup name="crystals" width="69" height="8">
@@ -73,5 +73,8 @@
   <object x="2128" y="177">
    <ellipse/>
   </object>
+ </objectgroup>
+ <objectgroup name="spawn" width="69" height="32">
+  <object x="41" y="203" width="23" height="22"/>
  </objectgroup>
 </map>

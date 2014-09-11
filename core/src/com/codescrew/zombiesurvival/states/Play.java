@@ -7,6 +7,8 @@ import static com.codescrew.zombiesurvival.handlers.B2DVars.PPM;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -34,7 +36,7 @@ import com.codescrew.zombiesurvival.main.Game;
 
 public class Play extends GameState {
 
-    private boolean debug = false;
+    private boolean debug = true;
 
     private World world;
     private Box2DDebugRenderer b2dRenderer;
@@ -67,12 +69,14 @@ public class Play extends GameState {
         world.setContactListener(cl);
         b2dRenderer = new Box2DDebugRenderer();
 
-        // create player
-        createPlayer();
+
 
         // create walls
         createWalls();
         cam.setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
+
+        // create player
+        createPlayer();
 
         // create crystals
         //createCrystals();
@@ -99,7 +103,7 @@ public class Play extends GameState {
 
         // set up box2d cam
         b2dCam = new BoundedCamera();
-        b2dCam.setToOrtho(false, (Game.V_WIDTH / PPM)*2, (Game.V_HEIGHT / PPM)*2);
+        b2dCam.setToOrtho(false, (Game.V_WIDTH / PPM)*2, (Game.V_HEIGHT / PPM)*4);
         b2dCam.setBounds(0, (tileMapWidth * tileSize) / PPM, 0, (tileMapHeight * tileSize) / PPM);
 
     }
@@ -110,10 +114,20 @@ public class Play extends GameState {
      */
     private void createPlayer() {
 
+        MapLayer ml = tileMap.getLayers().get("spawn");
+
+        MapObject mo = ml.getObjects().get(0);
+        float spawnX = (Float) mo.getProperties().get("x");
+        float spawnY = (Float) mo.getProperties().get("y");
+
+        Gdx.app.log("Play", spawnX+"");
+        Gdx.app.log("Play", spawnY+"");
+
         // create bodydef
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(60 / PPM, 800 / PPM);
+        //bdef.position.set(60 / PPM, 800 / PPM);
+        bdef.position.set(spawnX / PPM, spawnY / PPM);
 
         bdef.fixedRotation = true;
         bdef.linearVelocity.set(Player.horizontalSpeed, 0f);
@@ -180,9 +194,6 @@ public class Play extends GameState {
             e.printStackTrace();
             Gdx.app.exit();
         }
-        Gdx.app.log("Play", (tileMap == null)+"");
-        Gdx.app.log("Play", (tileMap.getProperties() == null)+"");
-        Gdx.app.log("Play", (tileMap.getProperties().get("width") == null)+"");
         tileMapWidth = (Integer) tileMap.getProperties().get("width");
         tileMapHeight = (Integer) tileMap.getProperties().get("height");
         tileSize = (Integer) tileMap.getProperties().get("tilewidth");
