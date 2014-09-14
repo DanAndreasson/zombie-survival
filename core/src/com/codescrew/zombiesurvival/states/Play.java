@@ -103,7 +103,7 @@ public class Play extends GameState {
 
         // set up box2d cam
         b2dCam = new BoundedCamera();
-        b2dCam.setToOrtho(false, (Game.V_WIDTH / PPM)*2, (Game.V_HEIGHT / PPM)*4);
+        b2dCam.setToOrtho(false, (Game.V_WIDTH / PPM)*2, (Game.V_HEIGHT / PPM)*2);
         b2dCam.setBounds(0, (tileMapWidth * tileSize) / PPM, 0, (tileMapHeight * tileSize) / PPM);
 
     }
@@ -137,7 +137,7 @@ public class Play extends GameState {
 
         // create box shape for player collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(13 / PPM, 13 / PPM);
+        shape.setAsBox(7 / PPM, 12 / PPM);
 
         // create fixturedef for player collision box
         FixtureDef fdef = new FixtureDef();
@@ -412,7 +412,7 @@ public class Play extends GameState {
     public void render() {
 
         // camera follow player
-        cam.setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, player.getPosition().y * PPM + Game.V_HEIGHT / 3);
+        cam.setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, player.getPosition().y * PPM + Game.V_HEIGHT / 4);
         cam.update();
 
         // draw bgs

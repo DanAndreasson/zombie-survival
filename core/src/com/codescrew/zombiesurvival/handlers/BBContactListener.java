@@ -32,7 +32,10 @@ public class BBContactListener implements ContactListener {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
+
+
         if(fa == null || fb == null) return;
+
 
         if(fixtureIs(fa, "foot")) {
             numFootContacts++;

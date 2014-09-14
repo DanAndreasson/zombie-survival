@@ -25,7 +25,7 @@ public class Player extends B2DSprite {
         Texture tex = Game.res.getTexture("zombie");
         TextureRegion[] sprites = new TextureRegion[3];
         for(int i = 0; i < sprites.length; i++) {
-            sprites[i] = new TextureRegion(tex, i * 32, 0, 32, 32);
+            sprites[i] = new TextureRegion(tex, i * 21, 0, 21, 30);
         }
 
         animation.setFrames(sprites, 1 / 12f);
