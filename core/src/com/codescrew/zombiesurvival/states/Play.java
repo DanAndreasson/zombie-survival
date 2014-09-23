@@ -36,6 +36,7 @@ import com.codescrew.zombiesurvival.main.Game;
 
 public class Play extends GameState {
 
+    private static final String TAG = "Play";
     private boolean debug = true;
 
     private World world;
@@ -70,7 +71,6 @@ public class Play extends GameState {
         b2dRenderer = new Box2DDebugRenderer();
 
 
-
         // create walls
         createWalls();
         cam.setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
@@ -90,7 +90,7 @@ public class Play extends GameState {
         TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
         TextureRegion clouds = new TextureRegion(bgs, 0, 240, 320, 240);
         TextureRegion mountains = new TextureRegion(bgs, 0, 480, 320, 240);
-       // TextureRegion sky = new TextureRegion(bgs, 0, 0, Game.V_WIDTH, Game.V_HEIGHT);
+        // TextureRegion sky = new TextureRegion(bgs, 0, 0, Game.V_WIDTH, Game.V_HEIGHT);
         //TextureRegion clouds = new TextureRegion(bgs, 0, Game.V_HEIGHT, Game.V_WIDTH, Game.V_HEIGHT);
         //TextureRegion mountains = new TextureRegion(bgs, 0, Game.V_WIDTH*2, Game.V_WIDTH, Game.V_HEIGHT);
         backgrounds = new Background[3];
@@ -103,7 +103,7 @@ public class Play extends GameState {
 
         // set up box2d cam
         b2dCam = new BoundedCamera();
-        b2dCam.setToOrtho(false, (Game.V_WIDTH / PPM)*2, (Game.V_HEIGHT / PPM)*2);
+        b2dCam.setToOrtho(false, (Game.V_WIDTH / PPM) * 2, (Game.V_HEIGHT / PPM) * 2);
         b2dCam.setBounds(0, (tileMapWidth * tileSize) / PPM, 0, (tileMapHeight * tileSize) / PPM);
 
     }
@@ -120,13 +120,12 @@ public class Play extends GameState {
         float spawnX = (Float) mo.getProperties().get("x");
         float spawnY = (Float) mo.getProperties().get("y");
 
-        Gdx.app.log("Play", spawnX+"");
-        Gdx.app.log("Play", spawnY+"");
+        Gdx.app.log("Play", spawnX + "");
+        Gdx.app.log("Play", spawnY + "");
 
         // create bodydef
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.DynamicBody;
-        //bdef.position.set(60 / PPM, 800 / PPM);
         bdef.position.set(spawnX / PPM, spawnY / PPM);
 
         bdef.fixedRotation = true;
@@ -137,7 +136,7 @@ public class Play extends GameState {
 
         // create box shape for player collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(7 / PPM, 12 / PPM);
+        shape.setAsBox(7 / PPM, 9 / PPM);
 
         // create fixturedef for player collision box
         FixtureDef fdef = new FixtureDef();
@@ -145,15 +144,15 @@ public class Play extends GameState {
         fdef.density = 1;
         fdef.friction = 0;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_WALKABLE_BLOCK | B2DVars.BIT_CRYSTAL | B2DVars.BIT_SPIKE;
+        fdef.filter.maskBits = B2DVars.BIT_WALKABLE_BLOCK;
 
         // create player collision box fixture
-        body.createFixture(fdef);
+        body.createFixture(fdef).setUserData("player");
         shape.dispose();
 
         // create box shape for player foot
         shape = new PolygonShape();
-        shape.setAsBox(13 / PPM, 3 / PPM, new Vector2(0, -13 / PPM), 0);
+        shape.setAsBox(7 / PPM, 3 / PPM, new Vector2(0, -7 / PPM), 0);
 
         // create fixturedef for player foot
         fdef.shape = shape;
@@ -174,9 +173,6 @@ public class Play extends GameState {
         md.mass = player.getBodyMass();
         body.setMassData(md);
 
-        // i need a ratio of 0.005
-        // so at 1kg, i need 200 N jump force
-
     }
 
     /**
@@ -188,8 +184,7 @@ public class Play extends GameState {
         // load tile map and map renderer
         try {
             tileMap = new TmxMapLoader().load("maps/level" + level + ".tmx");
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Cannot find file: maps/level" + level + ".tmx");
             e.printStackTrace();
             Gdx.app.exit();
@@ -220,7 +215,7 @@ public class Play extends GameState {
      * category bits.
      *
      * @param layer the layer being read
-     * @param bits category bits assigned to fixtures
+     * @param bits  category bits assigned to fixtures
      */
     private void createBlocks(TiledMapTileLayer layer, short bits) {
 
@@ -230,32 +225,33 @@ public class Play extends GameState {
         float ts = layer.getTileWidth();
 
         // go through all cells in layer
-        for(int row = 0; row < layer.getHeight(); row++) {
-            for(int col = 0; col < layer.getWidth(); col++) {
+        for (int row = 0; row < layer.getHeight(); row++) {
+            for (int col = 0; col < layer.getWidth(); col++) {
 
                 // get cell
                 TiledMapTileLayer.Cell cell = layer.getCell(col, row);
 
                 // check that there is a cell
-                if(cell == null) continue;
-                if(cell.getTile() == null) continue;
+                if (cell == null) continue;
+                if (cell.getTile() == null) continue;
 
                 // create body from cell
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyDef.BodyType.StaticBody;
                 bdef.position.set((col + 0.5f) * ts / PPM, (row + 0.5f) * ts / PPM);
                 ChainShape cs = new ChainShape();
-                Vector2[] v = new Vector2[3];
+                Vector2[] v = new Vector2[4];
                 v[0] = new Vector2(-ts / 2 / PPM, -ts / 2 / PPM);
                 v[1] = new Vector2(-ts / 2 / PPM, ts / 2 / PPM);
                 v[2] = new Vector2(ts / 2 / PPM, ts / 2 / PPM);
+                v[3] = new Vector2(ts / 2 / PPM, -ts / 2 / PPM);
                 cs.createChain(v);
                 FixtureDef fd = new FixtureDef();
                 fd.friction = 0;
                 fd.shape = cs;
                 fd.filter.categoryBits = bits;
                 fd.filter.maskBits = B2DVars.BIT_PLAYER;
-                world.createBody(bdef).createFixture(fd);
+                world.createBody(bdef).createFixture(fd).setUserData("solid");
                 cs.dispose();
 
             }
@@ -337,19 +333,17 @@ public class Play extends GameState {
      * Apply upward force to player body.
      */
     private void playerJump() {
-        if(cl.playerCanJump()) {
-            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-            player.getBody().applyForceToCenter(0, player.getVerticalForce(), true);
-            Game.res.getSound("jump").play();
+        if (cl.playerCanJump() && player.inAir()) {
+            player.wallJump();
+        } else if (cl.playerCanJump()) {
+            player.jump();
         }
     }
 
 
-
     public void handleInput() {
-
         // Touches screen
-        if(BBInput.isPressed()) {
+        if (BBInput.isPressed()) {
             playerJump();
         }
 
@@ -365,7 +359,7 @@ public class Play extends GameState {
 
         // check for collected crystals
         Array<Body> bodies = cl.getBodies();
-        for(int i = 0; i < bodies.size; i++) {
+        for (int i = 0; i < bodies.size; i++) {
             Body b = bodies.get(i);
             //crystals.removeValue((Crystal) b.getUserData(), true);
             world.destroyBody(bodies.get(i));
@@ -377,22 +371,38 @@ public class Play extends GameState {
         // update player
         player.update(dt);
 
+        player.setLastDirection(player.getBody().getLinearVelocity().x);
+        player.getBody().applyForce(new Vector2(3, 3), player.getBody().getPosition(), true);
+
+        if (!player.inAir() && player.getBody().getLinearVelocity().x == 0)
+        {
+            //player.getBody().setLinearVelocity(0, 0);
+            //player.getBody().applyForceToCenter(0, 0, true);y
+            //player.getBody().setLinearVelocity(3f, 0);
+            //player.getBody().applyForceToCenter(player.getLevelForce(), 0, true);
+        }
+
+        //if (player.getBody().getLinearVelocity().x == 0 && player.getLastDirection() > 0)
+        //    player.getBody().setLinearVelocity(3f, player.getBody().getLinearVelocity().y);
+
         // check player win
-        if(player.getBody().getPosition().x * PPM > tileMapWidth * tileSize) {
+        if (player.getBody().getPosition().x * PPM > tileMapWidth * tileSize) {
             Game.res.getSound("levelselect").play();
             gsm.setState(GameStateManager.LEVEL_SELECT);
         }
 
         // check player failed
-        if(player.getBody().getPosition().y < 0) {
+        if (player.getBody().getPosition().y < 0) {
             Game.res.getSound("hit").play();
             gsm.setState(GameStateManager.MENU);
         }
 
-        if(player.getBody().getLinearVelocity().x < 0.001f) {
-            player.getBody().setLinearVelocity(Player.horizontalSpeed, player.getBody().getLinearVelocity().y);
-        }
-        if(cl.isPlayerDead()) {
+
+        //if(player.getBody().getLinearVelocity().x < 0.001f) {
+        //   player.getBody().setLinearVelocity(Player.horizontalSpeed, player.getBody().getLinearVelocity().y);
+        //}
+
+        if (cl.isPlayerDead()) {
             Game.res.getSound("hit").play();
             gsm.setState(GameStateManager.MENU);
         }
@@ -417,7 +427,7 @@ public class Play extends GameState {
 
         // draw bgs
         sb.setProjectionMatrix(hudCam.combined);
-        for(int i = 0; i < backgrounds.length; i++) {
+        for (int i = 0; i < backgrounds.length; i++) {
             backgrounds[i].render(sb);
         }
 
@@ -444,7 +454,7 @@ public class Play extends GameState {
         hud.render(sb);
 
         // debug draw box2d
-        if(debug) {
+        if (debug) {
             b2dCam.setPosition(player.getPosition().x + Game.V_WIDTH / 4 / PPM, Game.V_HEIGHT / 2 / PPM);
             b2dCam.update();
             b2dRenderer.render(world, b2dCam.combined);

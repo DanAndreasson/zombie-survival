@@ -12,9 +12,11 @@ import com.badlogic.gdx.utils.Array;
 
 public class BBContactListener implements ContactListener {
 
+    private static final String TAG = "BBContactListener";
     private int numFootContacts;
     private Array<Body> bodiesToRemove;
     private boolean playerDead;
+    private boolean canWallJump;
 
     public BBContactListener() {
         super();
@@ -23,7 +25,6 @@ public class BBContactListener implements ContactListener {
 
 
     /**
-     *
      *
      * @param contact
      */
@@ -36,12 +37,12 @@ public class BBContactListener implements ContactListener {
 
         if(fa == null || fb == null) return;
 
-
-        if(fixtureIs(fa, "foot")) {
-            numFootContacts++;
+        if (oneFixtureIs(fa, fb, "foot") && oneFixtureIs(fa, fb, "solid" )){
+            ++numFootContacts;
         }
-        if(fixtureIs(fb, "foot")) {
-            numFootContacts++;
+
+        if (oneFixtureIs(fa, fb, "player") && oneFixtureIs(fa, fb, "solid")){
+            canWallJump = true;
         }
 
         if(fixtureIs(fa, "crystal")) {
@@ -53,14 +54,15 @@ public class BBContactListener implements ContactListener {
 
         if(fixtureIs(fa, "spike")) {
             playerDead = true;
-            Gdx.app.log("BBContactListener", "FA: Spike");
         }
         if(fixtureIs(fb, "spike")) {
             playerDead = true;
-            Gdx.app.log("BBContactListener", "FB: Spike");
-
         }
 
+    }
+
+    private boolean oneFixtureIs(Fixture fa, Fixture fb, String fixture) {
+        return fixtureIs(fa, fixture) || fixtureIs(fb, fixture);
     }
 
     public boolean fixtureIs(Fixture fix, String name) {
@@ -74,16 +76,17 @@ public class BBContactListener implements ContactListener {
 
         if(fa == null || fb == null) return;
 
-        if(fixtureIs(fa, "foot")) {
-            numFootContacts--;
-        }
-        if(fixtureIs(fb, "foot")) {
-            numFootContacts--;
-        }
 
+        if (oneFixtureIs(fa, fb, "foot") && oneFixtureIs(fa, fb, "solid" )){
+            --numFootContacts;
+        }
+        if (oneFixtureIs(fa, fb, "player") && oneFixtureIs(fa, fb, "solid")){
+            canWallJump = false;
+        }
     }
 
     public boolean playerCanJump() { return numFootContacts > 0; }
+    public boolean playerCanWallJump() { return canWallJump; }
     public Array<Body> getBodies() { return bodiesToRemove; }
     public boolean isPlayerDead() { return playerDead; }
 
