@@ -13,7 +13,7 @@ import com.codescrew.zombiesurvival.handlers.GameStateManager;
 public class Game extends ApplicationAdapter {
 
     public static final String TITLE = "Zombie Survival?!";
-    public static final int SCALE = 1;
+    public static final int SCALE = 3;
     public static final int V_WIDTH = 320*SCALE;
     public static final int V_HEIGHT = 240*SCALE;
 
@@ -32,12 +32,17 @@ public class Game extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new BBInputProcessor());
 
         res = new Content();
+        res.loadTexture("images/menubg.png");
         res.loadTexture("images/menu.png");
+        res.loadTexture("images/title.png");
         res.loadTexture("images/bgs.png");
         res.loadTexture("images/hud.png");
         res.loadTexture("images/zombie.png");
-        res.loadTexture("images/crystal.png");
+        res.loadTexture("images/brain.png");
+        res.loadTexture("images/score-brain.png");
         res.loadTexture("images/spikes.png");
+        res.loadTexture("images/tombstone.png");
+        res.loadTexture("images/bigfont.png");
 
         res.loadSound("sfx/jump.wav");
         res.loadSound("sfx/crystal.wav");

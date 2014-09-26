@@ -16,7 +16,6 @@ public class BBContactListener implements ContactListener {
     private int numFootContacts;
     private Array<Body> bodiesToRemove;
     private boolean playerDead;
-    private boolean canWallJump;
 
     public BBContactListener() {
         super();
@@ -41,15 +40,11 @@ public class BBContactListener implements ContactListener {
             ++numFootContacts;
         }
 
-        if (oneFixtureIs(fa, fb, "player") && oneFixtureIs(fa, fb, "solid")){
-            canWallJump = true;
-        }
-
-        if(fixtureIs(fa, "crystal")) {
-            bodiesToRemove.add(fa.getBody());
-        }
-        if(fixtureIs(fb, "crystal")) {
-            bodiesToRemove.add(fb.getBody());
+        if(oneFixtureIs(fa, fb, "brain" )) {
+            Gdx.app.log(TAG, "Brain collected!");
+            Fixture brain = fa;
+            if (fixtureIs(fb, "brain")) brain = fb;
+            bodiesToRemove.add(brain.getBody());
         }
 
         if(fixtureIs(fa, "spike")) {
@@ -80,15 +75,12 @@ public class BBContactListener implements ContactListener {
         if (oneFixtureIs(fa, fb, "foot") && oneFixtureIs(fa, fb, "solid" )){
             --numFootContacts;
         }
-        if (oneFixtureIs(fa, fb, "player") && oneFixtureIs(fa, fb, "solid")){
-            canWallJump = false;
-        }
     }
 
     public boolean playerCanJump() { return numFootContacts > 0; }
-    public boolean playerCanWallJump() { return canWallJump; }
-    public Array<Body> getBodies() { return bodiesToRemove; }
+    public Array<Body> getCollectedBrains() { return bodiesToRemove; }
     public boolean isPlayerDead() { return playerDead; }
+
 
     public void preSolve(Contact c, Manifold m) {}
     public void postSolve(Contact c, ContactImpulse ci) {}

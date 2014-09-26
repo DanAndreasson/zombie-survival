@@ -5,9 +5,6 @@ import com.codescrew.zombiesurvival.handlers.GameButton;
 import com.codescrew.zombiesurvival.handlers.GameStateManager;
 import com.codescrew.zombiesurvival.main.Game;
 
-/**
- * Created by raimat on 2014-09-09.
- */
 public class LevelSelect extends GameState {
 
     private TextureRegion reg;
@@ -18,13 +15,24 @@ public class LevelSelect extends GameState {
 
         super(gsm);
 
-        reg = new TextureRegion(Game.res.getTexture("bgs"), 0, 0, Game.V_WIDTH, Game.V_HEIGHT);
+        reg = new TextureRegion(Game.res.getTexture("menubg"), 0, 0, Game.V_WIDTH, Game.V_HEIGHT);
 
-        TextureRegion buttonReg = new TextureRegion(Game.res.getTexture("hud"), 0, 0, 32, 32);
+        int contentMarginLeft =  270;
+        int contentMarginTop =  150;
+        int btnWidth = 100;
+        int btnHeight = 100;
+        int btnMargin = 50;
+
+        TextureRegion buttonReg = new TextureRegion(Game.res.getTexture("tombstone"), 0, 0, 68, 68);
         buttons = new GameButton[5][5];
         for(int row = 0; row < buttons.length; row++) {
             for(int col = 0; col < buttons[0].length; col++) {
-                buttons[row][col] = new GameButton(buttonReg, 80 + col * 40, 200 - row * 40, cam);
+
+                buttons[row][col] = new GameButton(buttonReg,
+                        contentMarginLeft + col * btnWidth,
+                        Game.V_HEIGHT - contentMarginTop - row * btnHeight,
+                        cam, true);
+
                 buttons[row][col].setText(row * buttons[0].length + col + 1 + "");
             }
         }
@@ -34,10 +42,10 @@ public class LevelSelect extends GameState {
     }
 
     public void handleInput() {
+
     }
 
     public void update(float dt) {
-
         handleInput();
 
         for(int row = 0; row < buttons.length; row++) {
@@ -50,7 +58,6 @@ public class LevelSelect extends GameState {
                 }
             }
         }
-
     }
 
     public void render() {

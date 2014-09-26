@@ -18,11 +18,13 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.codescrew.zombiesurvival.entities.Brain;
 import com.codescrew.zombiesurvival.entities.HUD;
 import com.codescrew.zombiesurvival.entities.Player;
 import com.codescrew.zombiesurvival.handlers.B2DVars;
@@ -37,7 +39,7 @@ import com.codescrew.zombiesurvival.main.Game;
 public class Play extends GameState {
 
     private static final String TAG = "Play";
-    private boolean debug = true;
+    private boolean debug = false;
 
     private World world;
     private Box2DDebugRenderer b2dRenderer;
@@ -59,6 +61,7 @@ public class Play extends GameState {
     private HUD hud;
 
     public static int level;
+    private Array<Brain> brains;
 
     public Play(GameStateManager gsm) {
 
@@ -79,17 +82,17 @@ public class Play extends GameState {
         createPlayer();
 
         // create crystals
-        //createCrystals();
-        //player.setTotalBrains(crystals.size);
+        createBrains();
+        player.setTotalBrains(brains.size);
 
         // create spikes
         //createSpikes();
 
         // create backgrounds
         Texture bgs = Game.res.getTexture("bgs");
-        TextureRegion sky = new TextureRegion(bgs, 0, 0, 320, 240);
-        TextureRegion clouds = new TextureRegion(bgs, 0, 240, 320, 240);
-        TextureRegion mountains = new TextureRegion(bgs, 0, 480, 320, 240);
+        TextureRegion sky = new TextureRegion(bgs, 0, 0, 960, 720);
+        TextureRegion clouds = new TextureRegion(bgs, 0, 720, 960, 720);
+        TextureRegion mountains = new TextureRegion(bgs, 0, 1440, 960, 720);
         // TextureRegion sky = new TextureRegion(bgs, 0, 0, Game.V_WIDTH, Game.V_HEIGHT);
         //TextureRegion clouds = new TextureRegion(bgs, 0, Game.V_HEIGHT, Game.V_WIDTH, Game.V_HEIGHT);
         //TextureRegion mountains = new TextureRegion(bgs, 0, Game.V_WIDTH*2, Game.V_WIDTH, Game.V_HEIGHT);
@@ -129,14 +132,13 @@ public class Play extends GameState {
         bdef.position.set(spawnX / PPM, spawnY / PPM);
 
         bdef.fixedRotation = true;
-        bdef.linearVelocity.set(Player.horizontalSpeed, 0f);
 
         // create body from bodydef
         Body body = world.createBody(bdef);
 
         // create box shape for player collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(7 / PPM, 9 / PPM);
+        shape.setAsBox(14 / PPM, 20 / PPM);
 
         // create fixturedef for player collision box
         FixtureDef fdef = new FixtureDef();
@@ -144,15 +146,15 @@ public class Play extends GameState {
         fdef.density = 1;
         fdef.friction = 0;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_WALKABLE_BLOCK;
+        fdef.filter.maskBits = B2DVars.BIT_WALKABLE_BLOCK | B2DVars.BIT_BRAIN | B2DVars.BIT_SPIKE;
 
         // create player collision box fixture
-        body.createFixture(fdef).setUserData("player");
+        body.createFixture(fdef);
         shape.dispose();
 
         // create box shape for player foot
         shape = new PolygonShape();
-        shape.setAsBox(7 / PPM, 3 / PPM, new Vector2(0, -7 / PPM), 0);
+        shape.setAsBox(14 / PPM, 10 / PPM, new Vector2(0, -10 / PPM), 0);
 
         // create fixturedef for player foot
         fdef.shape = shape;
@@ -196,15 +198,7 @@ public class Play extends GameState {
 
         // read each of the "red" "green" and "blue" layers
         TiledMapTileLayer layer;
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
-        createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("grass");
-        createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("ground");
-        createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("green");
-        createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("blue");
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("blocks");
         createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
 
     }
@@ -262,22 +256,22 @@ public class Play extends GameState {
     /**
      * Set up box2d bodies for crystals in tile map "crystals" layer
      */
-   /* private void createCrystals() {
+    private void createBrains() {
 
         // create list of crystals
-        crystals = new Array<Crystal>();
+        brains = new Array<Brain>();
 
         // get all crystals in "crystals" layer,
         // create bodies for each, and add them
         // to the crystals list
-        MapLayer ml = tileMap.getLayers().get("crystals");
+        MapLayer ml = tileMap.getLayers().get("brains");
         if(ml == null) return;
 
         for(MapObject mo : ml.getObjects()) {
             BodyDef cdef = new BodyDef();
             cdef.type = BodyDef.BodyType.StaticBody;
-            float x = (float) mo.getProperties().get("x") / PPM;
-            float y = (float) mo.getProperties().get("y") / PPM;
+            float x = (Float) mo.getProperties().get("x") / PPM;
+            float y = (Float) mo.getProperties().get("y") / PPM;
             cdef.position.set(x, y);
             Body body = world.createBody(cdef);
             FixtureDef cfdef = new FixtureDef();
@@ -285,15 +279,15 @@ public class Play extends GameState {
             cshape.setRadius(8 / PPM);
             cfdef.shape = cshape;
             cfdef.isSensor = true;
-            cfdef.filter.categoryBits = B2DVars.BIT_CRYSTAL;
+            cfdef.filter.categoryBits = B2DVars.BIT_BRAIN;
             cfdef.filter.maskBits = B2DVars.BIT_PLAYER;
-            body.createFixture(cfdef).setUserData("crystal");
-            Crystal c = new Crystal(body);
-            body.setUserData(c);
-            crystals.add(c);
+            body.createFixture(cfdef).setUserData("brain");
+            Brain b = new Brain(body);
+            body.setUserData(b);
+            brains.add(b);
             cshape.dispose();
         }
-    }*/
+    }
 
     /**
      * Set up box2d bodies for spikes in "spikes" layer
@@ -329,9 +323,7 @@ public class Play extends GameState {
     }*/
 
 
-    /**
-     * Apply upward force to player body.
-     */
+
     private void playerJump() {
         if (cl.playerCanJump() && player.inAir()) {
             player.wallJump();
@@ -358,32 +350,32 @@ public class Play extends GameState {
         world.step(Game.STEP, 1, 1);
 
         // check for collected crystals
-        Array<Body> bodies = cl.getBodies();
+        Array<Body> bodies = cl.getCollectedBrains();
         for (int i = 0; i < bodies.size; i++) {
             Body b = bodies.get(i);
-            //crystals.removeValue((Crystal) b.getUserData(), true);
+            brains.removeValue((Brain) b.getUserData(), true);
             world.destroyBody(bodies.get(i));
             player.collectBrain();
-            Game.res.getSound("crystal").play();
+//            Game.res.getSound("brain").play();
         }
         bodies.clear();
 
         // update player
         player.update(dt);
 
-        player.setLastDirection(player.getBody().getLinearVelocity().x);
-        player.getBody().applyForce(new Vector2(3, 3), player.getBody().getPosition(), true);
+        player.setLastDirection(player.xVelocity());
 
-        if (!player.inAir() && player.getBody().getLinearVelocity().x == 0)
+
+        if(!player.inAir() && player.xVelocity() < 0){
+            player.getBody().applyForceToCenter(9.82f, Player.GRAVITY, true);
+        }
+        else if (!player.inAir() ||
+                (player.xVelocity() == 0 && !cl.playerCanJump()))
         {
-            //player.getBody().setLinearVelocity(0, 0);
-            //player.getBody().applyForceToCenter(0, 0, true);y
-            //player.getBody().setLinearVelocity(3f, 0);
-            //player.getBody().applyForceToCenter(player.getLevelForce(), 0, true);
+            player.setXVelocity(Player.RUNNING_SPEED);
         }
 
-        //if (player.getBody().getLinearVelocity().x == 0 && player.getLastDirection() > 0)
-        //    player.getBody().setLinearVelocity(3f, player.getBody().getLinearVelocity().y);
+        player.applyGravity();
 
         // check player win
         if (player.getBody().getPosition().x * PPM > tileMapWidth * tileSize) {
@@ -398,32 +390,22 @@ public class Play extends GameState {
         }
 
 
-        //if(player.getBody().getLinearVelocity().x < 0.001f) {
-        //   player.getBody().setLinearVelocity(Player.horizontalSpeed, player.getBody().getLinearVelocity().y);
-        //}
-
         if (cl.isPlayerDead()) {
             Game.res.getSound("hit").play();
             gsm.setState(GameStateManager.MENU);
         }
 
-        // update crystals
-        /*for(int i = 0; i < crystals.size; i++) {
-            crystals.get(i).update(dt);
-        }
-
-        // update spikes
-        for(int i = 0; i < spikes.size; i++) {
-            spikes.get(i).update(dt);
-        }*/
-
     }
 
     public void render() {
+        Gdx.gl.glClearColor(116/255f, 200/255f, 255/255f, 1);
 
         // camera follow player
         cam.setPosition(player.getPosition().x * PPM + Game.V_WIDTH / 4, player.getPosition().y * PPM + Game.V_HEIGHT / 4);
         cam.update();
+
+
+
 
         // draw bgs
         sb.setProjectionMatrix(hudCam.combined);
@@ -439,13 +421,13 @@ public class Play extends GameState {
         sb.setProjectionMatrix(cam.combined);
         player.render(sb);
 
-      /*  // draw crystals
-        for(int i = 0; i < crystals.size; i++) {
-            crystals.get(i).render(sb);
+        // draw brains
+        for(Brain brain : brains) {
+            brain.render(sb);
         }
 
         // draw spikes
-        for(int i = 0; i < spikes.size; i++) {
+        /*for(int i = 0; i < spikes.size; i++) {
             spikes.get(i).render(sb);
         }*/
 
@@ -463,7 +445,7 @@ public class Play extends GameState {
     }
 
     public void dispose() {
-        // everything is in the resource manager com.neet.blockbunny.handlers.Content
+
     }
 
 }

@@ -10,27 +10,30 @@ import com.codescrew.zombiesurvival.main.Game;
 
 public class Player extends B2DSprite {
 
-    public static final float horizontalSpeed = 1.7f;
     private static final String TAG = "Player";
     private int numCrystals;
     private int totalCrystals;
 
-    private int verticalForce;
     private float bodyMass;
-    private float levelForce = 1.2f;
     private float lastDirection;
+
+    // CONSTANTS
+    public static final float RUNNING_SPEED = 2f;
+    public static final float GRAVITY = -9.82f;
+    public static final float JUMP_SPEED = 5.5f;
+    private static final float WALLJUMP_X_SPEED = 2f;
+    private static final float WALLJUMP_Y_SPEED = 5f;
 
     public Player(Body body) {
 
         super(body);
 
-        verticalForce = 80;  // If higher then jump higher
-        bodyMass = 1;
+        bodyMass = 1f;
 
         Texture tex = Game.res.getTexture("zombie");
-        TextureRegion[] sprites = new TextureRegion[3];
+        TextureRegion[] sprites = new TextureRegion[4];
         for(int i = 0; i < sprites.length; i++) {
-            sprites[i] = new TextureRegion(tex, i * 21, 0, 21, 30);
+            sprites[i] = new TextureRegion(tex, i * 55, 0, 55, 61);
         }
 
         animation.setFrames(sprites, 1 / 12f);
@@ -46,7 +49,6 @@ public class Player extends B2DSprite {
     public void setTotalBrains(int i) { totalCrystals = i; }
     public int getTotalBrains() { return totalCrystals; }
 
-    public int getVerticalForce() { return verticalForce; }
 
 
     public float getBodyMass() {
@@ -58,35 +60,52 @@ public class Player extends B2DSprite {
     }
 
     public void jump() {
-        //getBody().setLinearVelocity(getBody().getLinearVelocity().x, 1.7f);
-        //getBody().applyForceToCenter(levelForce, getVerticalForce(), true);
-        getBody().applyLinearImpulse(new Vector2(0, 3), body.getPosition(), true);
+        Gdx.app.log(TAG, "jump()");
+
+        setYVelocity(JUMP_SPEED);
+        applyGravity();
+
         Game.res.getSound("jump").play();
     }
 
     public void wallJump() {
-        float xVelo = 3f;
-        if (lastDirection > 0)
-            xVelo *= -1;
-        if (xVelo > 0 )
-            xVelo *= 2;
-        Gdx.app.log(TAG, (xVelo+""));
-        //body.setLinearVelocity(xVelo, 2f);
-        //getBody().applyForceToCenter(10f, getVerticalForce(), true);
-        getBody().setapplyLinearImpulse(new Vector2(xVelo, 3f), body.getPosition(), true);
+        Gdx.app.log(TAG, "WallJump()");
+
+        float velocity = WALLJUMP_X_SPEED;
+
+        if (lastDirection > 0){
+            velocity *= -1;
+        }
+
+        setYVelocity(WALLJUMP_Y_SPEED);
+        setXVelocity(velocity);
+
         Game.res.getSound("jump").play();
     }
 
     public float getLastDirection() { return lastDirection; }
 
     public void setLastDirection(float d) {
-        if (d != 0)
-            lastDirection = d;
-
-
+        if (d != 0) lastDirection = d;
     }
 
-    public float getLevelForce() {
-        return levelForce;
+    public float xVelocity(){
+        return body.getLinearVelocity().x;
+    }
+
+    public float yVelocity(){
+        return body.getLinearVelocity().y;
+    }
+
+    public void setXVelocity(float x) {
+        body.setLinearVelocity(x, yVelocity());
+    }
+
+    public void setYVelocity(float v){
+        body.setLinearVelocity(xVelocity(), v);
+    }
+
+    public void applyGravity(){
+        body.applyForceToCenter(0, GRAVITY, true);
     }
 }

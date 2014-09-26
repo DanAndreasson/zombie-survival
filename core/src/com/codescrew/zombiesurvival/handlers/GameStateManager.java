@@ -9,9 +9,7 @@ import com.codescrew.zombiesurvival.states.Menu;
 
 import java.util.Stack;
 
-/**
- * Created by raimat on 2014-09-09.
- */
+
 public class GameStateManager {
     private Game game;
 

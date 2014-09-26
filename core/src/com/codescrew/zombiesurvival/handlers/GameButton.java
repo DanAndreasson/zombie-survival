@@ -28,7 +28,7 @@ public class GameButton {
     private String text;
     private TextureRegion[] font;
 
-    public GameButton(TextureRegion reg, float x, float y, OrthographicCamera cam) {
+    public GameButton(TextureRegion reg, float x, float y, OrthographicCamera cam, boolean bigFont) {
 
         this.reg = reg;
         this.x = x;
@@ -39,6 +39,14 @@ public class GameButton {
         height = reg.getRegionHeight();
         vec = new Vector3();
 
+        if (bigFont)
+            setBigFont();
+        else
+            setSmallFont();
+
+    }
+
+    private void setSmallFont(){
         Texture tex = Game.res.getTexture("hud");
         font = new TextureRegion[11];
         for(int i = 0; i < 6; i++) {
@@ -46,6 +54,14 @@ public class GameButton {
         }
         for(int i = 0; i < 5; i++) {
             font[i + 6] = new TextureRegion(tex, 32 + i * 9, 25, 9, 9);
+        }
+    }
+
+    private void setBigFont(){
+        Texture tex = Game.res.getTexture("bigfont");
+        font = new TextureRegion[10];
+        for(int i = 0; i < font.length; i++) {
+            font[i] = new TextureRegion(tex, i * 16, 0, 16, 19);
         }
 
     }

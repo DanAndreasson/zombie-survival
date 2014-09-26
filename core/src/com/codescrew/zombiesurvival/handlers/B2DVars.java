@@ -10,10 +10,8 @@ public class B2DVars {
     // collision bit filters
     public static final short BIT_PLAYER = 2;
     public static final short BIT_WALKABLE_BLOCK = 4;
-    //public static final short BIT_GREEN_BLOCK = 8;
-    //public static final short BIT_BLUE_BLOCK = 16;
-    public static final short BIT_CRYSTAL = 32;
-    public static final short BIT_SPIKE = 64;
+    public static final short BIT_BRAIN = 8;
+    public static final short BIT_SPIKE = 16;
 
     public static final short BIT_TOP_BLOCK = 2;
     public static final short BIT_BOTTOM_BLOCK = 4;

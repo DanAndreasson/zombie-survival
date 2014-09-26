@@ -1,74 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="69" height="8" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="blocks" tilewidth="32" tileheight="32">
-  <image source="blocks.png" width="96" height="32"/>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" backgroundcolor="#74c8ff">
+ <tileset firstgid="1" name="sprites" tilewidth="32" tileheight="32">
+  <image source="sprites.jpg" width="96" height="160"/>
  </tileset>
- <layer name="red" width="69" height="8">
+ <layer name="blocks" width="128" height="64">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRgAwYoXioAlxuH8p+GuqAkQqYVDuGOgAAKqAAGg==
+   eJzt2F0LgjAYQGFvokDI//9vY8SgZE2N6T7OeeClC4Vax4U2TZIkSZIkMc21P4Cqsj+b/dnsz2Z/NvuzzdP3NXDPjMbTcv+lwnvS2J/N/mz2Z7M/m/3Z7M9mfzb7s9lf9mezP5v92ezPZn82+3P5/Me2t38N9j+f/dnsL/uz2Z/N/mz2Z/u8B7Q/D6X/bedEj8yMpOX+Ja+BeTXPxMyZ8z9nJK32D0r2P7qmeE2Mzv5pJfd6y/cy9k8b8bc+Zat/Tb33b3nfR8T+uXMi97/9/+3fw74P1s80tP5L4nhE2f+B/cv072Xfr9nf/kFL7YOa/fdaVq89sv+xNffcOsX+7ay5Jlr/X8db+x/0KlvrXSrMGWvbOu6858weVyvxfahf9mezP5v92ezPZn82+7PZn+0FACoYwA==
   </data>
  </layer>
- <layer name="green" width="69" height="8">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjATARII6YtUONkCqu4eqP2kJBluYMKHh4W7vKEAAAFPIAB0=
-  </data>
- </layer>
- <layer name="blue" width="69" height="8">
-  <data encoding="base64" compression="zlib">
-   eJxjYBi5gHmgHTAIwWiYYIKRHibMOPAoGNpguMYhrdLpaPqnPwAAwhAANw==
-  </data>
- </layer>
- <objectgroup name="crystals" width="69" height="8">
-  <object x="241" y="208">
+ <objectgroup name="brains">
+  <object x="167" y="1254" width="19" height="19">
    <ellipse/>
   </object>
-  <object x="273" y="208">
+  <object x="262" y="1190" width="20" height="21">
    <ellipse/>
   </object>
-  <object x="320" y="144">
+  <object x="330" y="1668" width="14" height="21">
    <ellipse/>
   </object>
-  <object x="417" y="176">
+  <object x="327" y="1637" width="15" height="13">
    <ellipse/>
   </object>
-  <object x="512" y="111">
+  <object x="488" y="1697" width="20" height="25">
    <ellipse/>
   </object>
-  <object x="786" y="176">
+  <object x="614" y="1635" width="20" height="20">
    <ellipse/>
   </object>
-  <object x="818" y="177">
+  <object x="710" y="1603" width="17" height="20">
    <ellipse/>
   </object>
-  <object x="1041" y="113">
+  <object x="521" y="1252" width="16" height="21">
    <ellipse/>
   </object>
-  <object x="945" y="145">
+  <object x="995" y="1344" width="25" height="26">
    <ellipse/>
   </object>
-  <object x="1137" y="144">
+  <object x="134" y="1572" width="16" height="20">
    <ellipse/>
   </object>
-  <object x="1232" y="143">
+  <object x="105" y="1606" width="13" height="18">
    <ellipse/>
   </object>
-  <object x="1615" y="113">
+  <object x="133" y="1667" width="14" height="16">
    <ellipse/>
   </object>
-  <object x="1648" y="114">
+  <object x="103" y="1765" width="17" height="17">
    <ellipse/>
   </object>
-  <object x="1969" y="82">
+  <object x="103" y="1734" width="17" height="19">
    <ellipse/>
   </object>
-  <object x="2064" y="178">
+  <object x="228" y="1766" width="15" height="14">
    <ellipse/>
   </object>
-  <object x="2096" y="177">
+  <object x="227" y="1732" width="18" height="18">
    <ellipse/>
   </object>
-  <object x="2128" y="177">
+  <object x="229" y="1706" width="15" height="10">
    <ellipse/>
   </object>
+  <object x="228" y="1672" width="9" height="6">
+   <ellipse/>
+  </object>
+  <object x="261" y="1379" width="20" height="20">
+   <ellipse/>
+  </object>
+  <object x="238" y="1380" width="13" height="14">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="spawn">
+  <object x="4" y="1217" width="23" height="27"/>
  </objectgroup>
 </map>

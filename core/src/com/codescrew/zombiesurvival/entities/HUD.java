@@ -13,7 +13,7 @@ public class HUD {
 
     private TextureRegion container;
     private TextureRegion[] blocks;
-    private TextureRegion crystal;
+    private TextureRegion brain;
     private TextureRegion[] font;
 
     public HUD(Player player) {
@@ -22,14 +22,8 @@ public class HUD {
 
         Texture tex = Game.res.getTexture("hud");
 
-        container = new TextureRegion(tex, 0, 0, 32, 32);
-
-        blocks = new TextureRegion[3];
-        for(int i = 0; i < blocks.length; i++) {
-            blocks[i] = new TextureRegion(tex, 32 + i * 16, 0, 16, 16);
-        }
-
-        crystal = new TextureRegion(tex, 80, 0, 16, 16);
+        Texture brainTex = Game.res.getTexture("score-brain");
+        brain = new TextureRegion(brainTex, 0, 0, 100, 69);
 
         font = new TextureRegion[11];
         for(int i = 0; i < 6; i++) {
@@ -45,26 +39,12 @@ public class HUD {
 
         sb.begin();
 
-        // draw container
-        sb.draw(container, 32, 200);
-
-        // draw blocks
-        short bits = player.getBody().getFixtureList().first().getFilterData().maskBits;
-        if((bits & B2DVars.BIT_WALKABLE_BLOCK) != 0) {
-            sb.draw(blocks[0], 40, 208);
-        }
-        else if((bits & B2DVars.BIT_WALKABLE_BLOCK) != 0) {
-            sb.draw(blocks[1], 40, 208);
-        }
-        else if((bits & B2DVars.BIT_WALKABLE_BLOCK) != 0) {
-            sb.draw(blocks[2], 40, 208);
-        }
-
         // draw crystal
-        sb.draw(crystal, 100, 208);
+        sb.draw(brain, Game.V_WIDTH-100, Game.V_HEIGHT-100);
 
         // draw crystal amount
-        drawString(sb, player.getNumBrains() + " / " + player.getTotalBrains(), 132, 211);
+        drawString(sb, player.getNumBrains() + " / " + player.getTotalBrains(),
+                Game.V_WIDTH-70, Game.V_HEIGHT-100);
 
         sb.end();
 

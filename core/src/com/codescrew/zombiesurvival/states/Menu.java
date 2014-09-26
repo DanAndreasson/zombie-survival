@@ -28,7 +28,9 @@ public class Menu extends GameState {
 
     private Background bg;
     private Animation animation;
+    private GameButton highscoreButton;
     private GameButton playButton;
+    private GameButton title;
 
     private World world;
     private Box2DDebugRenderer b2dRenderer;
@@ -39,137 +41,42 @@ public class Menu extends GameState {
 
         super(gsm);
 
-        Texture tex = Game.res.getTexture("menu");
+        Texture tex = Game.res.getTexture("menubg");
         bg = new Background(new TextureRegion(tex), cam, 1f);
-        bg.setVector(-20, 0);
+        bg.setVector(0, 0);
 
         tex = Game.res.getTexture("zombie");
-        TextureRegion[] reg = new TextureRegion[3];
-        for(int i = 0; i < reg.length; i++) {
-            reg[i] = new TextureRegion(tex, i * 32, 0, 32, 32);
+        TextureRegion[] sprites = new TextureRegion[4];
+        for(int i = 0; i < sprites.length; i++) {
+            sprites[i] = new TextureRegion(tex, i * 55, 0, 55, 61);
         }
-        animation = new Animation(reg, 1 / 12f);
+        animation = new Animation(sprites, 1 / 12f);
 
-        tex = Game.res.getTexture("hud");
-        playButton = new GameButton(new TextureRegion(tex, 0, 34, 58, 27), 160, 100, cam);
+        tex = Game.res.getTexture("menu");
+        playButton = new GameButton(new TextureRegion(tex, 0, 0, 185, 52),
+                Game.V_WIDTH/2, 350, cam, false);
+
+
+        tex = Game.res.getTexture("menu");
+        highscoreButton = new GameButton(new TextureRegion(tex, 0, 54, 433, 51),
+                Game.V_WIDTH/2, 250, cam, false);
+
+        tex = Game.res.getTexture("title");
+        title = new GameButton(new TextureRegion(tex, 0, 0, 792, 74),
+                Game.V_WIDTH/2, 550, cam, false);
 
         cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 
-        world = new World(new Vector2(0, -9.8f * 5), true);
-        //world = new World(new Vector2(0, 0), true);
-        b2dRenderer = new Box2DDebugRenderer();
-
-        createTitleBodies();
+        world = new World(new Vector2(0, 0), true);
 
     }
 
-    private void createTitleBodies() {
-
-        // top platform
-        BodyDef tpbdef = new BodyDef();
-        tpbdef.type = BodyDef.BodyType.StaticBody;
-        tpbdef.position.set(160 / PPM, 180 / PPM);
-        Body tpbody = world.createBody(tpbdef);
-        PolygonShape tpshape = new PolygonShape();
-        tpshape.setAsBox(120 / PPM, 1 / PPM);
-        FixtureDef tpfdef = new FixtureDef();
-        tpfdef.shape = tpshape;
-        tpfdef.filter.categoryBits = B2DVars.BIT_TOP_PLATFORM;
-        tpfdef.filter.maskBits = B2DVars.BIT_TOP_BLOCK;
-        tpbody.createFixture(tpfdef);
-        tpshape.dispose();
-
-        // bottom platform
-        BodyDef bpbdef = new BodyDef();
-        bpbdef.type = BodyDef.BodyType.StaticBody;
-        bpbdef.position.set(160 / PPM, 130 / PPM);
-        Body bpbody = world.createBody(bpbdef);
-        PolygonShape bpshape = new PolygonShape();
-        bpshape.setAsBox(120 / PPM, 1 / PPM);
-        FixtureDef bpfdef = new FixtureDef();
-        bpfdef.shape = bpshape;
-        bpfdef.filter.categoryBits = B2DVars.BIT_BOTTOM_PLATFORM;
-        bpfdef.filter.maskBits = B2DVars.BIT_BOTTOM_BLOCK;
-        bpbody.createFixture(bpfdef);
-        bpshape.dispose();
-
-        Texture tex = Game.res.getTexture("hud");
-        TextureRegion[] blockSprites = new TextureRegion[3];
-        for(int i = 0; i < blockSprites.length; i++) {
-            blockSprites[i] = new TextureRegion(tex, 58 + i * 5, 34, 5, 5);
-        }
-        blocks = new Array<B2DSprite>();
-
-        int[][] spellBlock = {
-                {1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1},
-                {0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0},
-                {0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0},
-                {1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0},
-                {1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1}
-        };
-        int[][] spellBunny = {
-                {1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1},
-                {1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0},
-                {1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0},
-                {1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0},
-                {1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0},
-        };
-
-        // top blocks
-        for(int row = 0; row < 5; row++) {
-            for(int col = 0; col < 29; col++) {
-                BodyDef tbbdef = new BodyDef();
-                tbbdef.type = BodyDef.BodyType.DynamicBody;
-                tbbdef.fixedRotation = true;
-                tbbdef.position.set((62 + col * 6 + col) / PPM, (270 - row * 6  + row) / PPM);
-                Body tbbody = world.createBody(tbbdef);
-                PolygonShape tbshape = new PolygonShape();
-                tbshape.setAsBox(2f / PPM, 2f / PPM);
-                FixtureDef tbfdef = new FixtureDef();
-                tbfdef.shape = tbshape;
-                tbfdef.filter.categoryBits = B2DVars.BIT_TOP_BLOCK;
-                tbfdef.filter.maskBits = B2DVars.BIT_TOP_PLATFORM | B2DVars.BIT_TOP_BLOCK;
-                tbbody.createFixture(tbfdef);
-                tbshape.dispose();
-                if(spellBlock[row][col] == 1) {
-                    B2DSprite sprite = new B2DSprite(tbbody);
-                    sprite.setAnimation(blockSprites[MathUtils.random(2)], 0);
-                    blocks.add(sprite);
-                }
-            }
-        }
-
-        // bottom blocks
-        for(int row = 0; row < 5; row++) {
-            for(int col = 0; col < 29; col++) {
-                BodyDef bbbdef = new BodyDef();
-                bbbdef.type = BodyDef.BodyType.DynamicBody;
-                bbbdef.fixedRotation = true;
-                bbbdef.position.set((62 + col * 6 + col) / PPM, (270 - row * 6 + row) / PPM);
-                Body bbbody = world.createBody(bbbdef);
-                PolygonShape bbshape = new PolygonShape();
-                bbshape.setAsBox(2f / PPM, 2f / PPM);
-                FixtureDef bbfdef = new FixtureDef();
-                bbfdef.shape = bbshape;
-                bbfdef.filter.categoryBits = B2DVars.BIT_BOTTOM_BLOCK;
-                bbfdef.filter.maskBits = B2DVars.BIT_BOTTOM_PLATFORM | B2DVars.BIT_BOTTOM_BLOCK;
-                bbbody.createFixture(bbfdef);
-                bbshape.dispose();
-                if(spellBunny[row][col] == 1) {
-                    B2DSprite sprite = new B2DSprite(bbbody);
-                    sprite.setAnimation(blockSprites[MathUtils.random(2)], 0);
-                    blocks.add(sprite);
-                }
-            }
-        }
-
-    }
 
     public void handleInput() {
 
         // mouse/touch input
         if(playButton.isClicked()) {
-            Game.res.getSound("crystal").play();
+            //Game.res.getSound("brain").play();
             gsm.setState(GameStateManager.LEVEL_SELECT);
         }
 
@@ -198,22 +105,16 @@ public class Menu extends GameState {
         // draw button
         playButton.render(sb);
 
+        // draw button
+        highscoreButton.render(sb);
+
+        // draw button
+        title.render(sb);
+
         // draw bunny
         sb.begin();
-        sb.draw(animation.getFrame(), 146, 31);
+        sb.draw(animation.getFrame(), 340, 62);
         sb.end();
-
-        // debug draw box2d
-        if(debug) {
-            cam.setToOrtho(false, Game.V_WIDTH / PPM, Game.V_HEIGHT / PPM);
-            b2dRenderer.render(world, cam.combined);
-            cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
-        }
-
-        // draw title
-        for(int i = 0; i < blocks.size; i++) {
-            blocks.get(i).render(sb);
-        }
 
     }
 
