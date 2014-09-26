@@ -4,7 +4,6 @@ package com.codescrew.zombiesurvival.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.codescrew.zombiesurvival.main.Game;
 
@@ -14,8 +13,14 @@ public class Player extends B2DSprite {
     private int numCrystals;
     private int totalCrystals;
 
-    private float bodyMass;
+    private TextureRegion[] zombieWalkSprites;
+    private TextureRegion[] zombieAirSprites;
+
+    private boolean flip;
+    private boolean facingRight;
     private float lastDirection;
+
+    private float bodyMass;
 
     // CONSTANTS
     public static final float RUNNING_SPEED = 2f;
@@ -30,17 +35,36 @@ public class Player extends B2DSprite {
 
         bodyMass = 1f;
 
+        lastDirection = 1;
+        flip = false;
+        facingRight = true;
+
+
+        initZombieWalkSprites();
+        initZombieAirSprites();
+
+        setAnimation(zombieWalkSprites, 1 / 12f);
+
+        width = zombieWalkSprites[0].getRegionWidth();
+        height = zombieWalkSprites[0].getRegionHeight();
+
+
+    }
+
+    private void initZombieWalkSprites(){
         Texture tex = Game.res.getTexture("zombie");
-        TextureRegion[] sprites = new TextureRegion[4];
-        for(int i = 0; i < sprites.length; i++) {
-            sprites[i] = new TextureRegion(tex, i * 55, 0, 55, 61);
+        zombieWalkSprites = new TextureRegion[4];
+        for(int i = 0; i < zombieWalkSprites.length; i++) {
+            zombieWalkSprites[i] = new TextureRegion(tex, i * 55, 0, 55, 61);
         }
+    }
 
-        animation.setFrames(sprites, 1 / 12f);
-
-        width = sprites[0].getRegionWidth();
-        height = sprites[0].getRegionHeight();
-
+    private void initZombieAirSprites(){
+        Texture tex = Game.res.getTexture("zombie-air");
+        zombieAirSprites = new TextureRegion[3];
+        for(int i = 0; i < zombieAirSprites.length; i++) {
+            zombieAirSprites[i] = new TextureRegion(tex, i * 55, 0, 55, 61);
+        }
     }
 
     public void collectBrain() { ++numCrystals; }
@@ -107,5 +131,24 @@ public class Player extends B2DSprite {
 
     public void applyGravity(){
         body.applyForceToCenter(0, GRAVITY, true);
+    }
+
+    public void changeSprites(){
+        if (yVelocity() == 0)
+            setAnimation(zombieWalkSprites, 1 / 12f);
+        else
+            setAnimation(zombieAirSprites, 1 / 12f);
+
+    }
+
+    public void update(float dt){
+        float xVelo = body.getLinearVelocity().x;
+        float yVelo = body.getLinearVelocity().y;
+        flip = yVelo!= 0 && ((facingRight && xVelo < 0) || (!facingRight && xVelo > 0));
+        if (flip) {
+            facingRight = !facingRight;
+            animation.flipFrames();
+        }
+        animation.update(dt);
     }
 }

@@ -28,31 +28,33 @@ public class BBContactListener implements ContactListener {
      * @param contact
      */
     public void beginContact(Contact contact) {
-
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
-
-
         if(fa == null || fb == null) return;
+
+
+
+        if (oneFixtureIs(fa, fb, "spike"))
+            Gdx.app.log(TAG, "Found a spike");
+
+        if (oneFixtureIs(fa, fb, "foot") && oneFixtureIs(fa, fb, "spike" )){
+            playerDead = true;
+            Gdx.app.log(TAG, "AJAJ FOTEN. SPIK");
+        }
 
         if (oneFixtureIs(fa, fb, "foot") && oneFixtureIs(fa, fb, "solid" )){
             ++numFootContacts;
         }
 
-        if(oneFixtureIs(fa, fb, "brain" )) {
+        if(oneFixtureIs(fa, fb, "brain" ) && oneFixtureIs(fa, fb, "foot")) {
             Gdx.app.log(TAG, "Brain collected!");
             Fixture brain = fa;
             if (fixtureIs(fb, "brain")) brain = fb;
             bodiesToRemove.add(brain.getBody());
         }
 
-        if(fixtureIs(fa, "spike")) {
-            playerDead = true;
-        }
-        if(fixtureIs(fb, "spike")) {
-            playerDead = true;
-        }
+
 
     }
 

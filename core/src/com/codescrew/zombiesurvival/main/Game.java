@@ -2,6 +2,7 @@ package com.codescrew.zombiesurvival.main;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.codescrew.zombiesurvival.handlers.BBInput;
@@ -43,6 +44,8 @@ public class Game extends ApplicationAdapter {
         res.loadTexture("images/spikes.png");
         res.loadTexture("images/tombstone.png");
         res.loadTexture("images/bigfont.png");
+        res.loadTexture("images/zombie-air.png");
+        res.loadTexture("maps/spike.png");
 
         res.loadSound("sfx/jump.wav");
         res.loadSound("sfx/crystal.wav");
@@ -67,8 +70,8 @@ public class Game extends ApplicationAdapter {
     }
 
     public void render() {
-
-        Gdx.graphics.setTitle(TITLE + " -- FPS: " + Gdx.graphics.getFramesPerSecond());
+        Gdx.gl.glClearColor(116f/255f, 200f/255f, 255f/255f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         gsm.update(Gdx.graphics.getDeltaTime());
         gsm.render();

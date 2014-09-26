@@ -25,7 +25,7 @@ public class Background {
         this.gameCam = gameCam;
         this.scale = scale;
         numDrawX = Game.V_WIDTH / image.getRegionWidth() + 1;
-        numDrawY = Game.V_HEIGHT / image.getRegionHeight() + 1;
+        numDrawY = 1;
     }
 
     public void setVector(float dx, float dy) {

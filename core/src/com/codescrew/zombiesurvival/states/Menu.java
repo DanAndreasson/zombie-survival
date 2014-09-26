@@ -42,7 +42,7 @@ public class Menu extends GameState {
         super(gsm);
 
         Texture tex = Game.res.getTexture("menubg");
-        bg = new Background(new TextureRegion(tex), cam, 1f);
+        bg = new Background(new TextureRegion(tex), cam, 0f);
         bg.setVector(0, 0);
 
         tex = Game.res.getTexture("zombie");

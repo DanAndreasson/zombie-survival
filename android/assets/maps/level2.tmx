@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" backgroundcolor="#74c8ff">
  <tileset firstgid="1" name="sprites" tilewidth="32" tileheight="32">
-  <image source="sprites.jpg" width="96" height="160"/>
+  <image source="sprites.png" width="96" height="160"/>
  </tileset>
  <layer name="blocks" width="128" height="64">
   <data encoding="base64" compression="zlib">
@@ -72,5 +72,31 @@
  </objectgroup>
  <objectgroup name="spawn">
   <object x="4" y="1217" width="23" height="27"/>
+ </objectgroup>
+ <objectgroup name="spikes">
+  <object x="203.03" y="1251.52" width="12.1212" height="15.1515">
+   <ellipse/>
+  </object>
+  <object x="330.303" y="1160.61" width="9.09091" height="15.1515">
+   <ellipse/>
+  </object>
+  <object x="139.394" y="1712.12" width="3.0303" height="3.0303">
+   <ellipse/>
+  </object>
+  <object x="363.636" y="1542.42" width="3.0303" height="18.1818">
+   <ellipse/>
+  </object>
+  <object x="1545.45" y="1672.73" width="3.0303" height="9.09091">
+   <ellipse/>
+  </object>
+  <object x="1675.76" y="1736.36" width="6.06061" height="9.09091">
+   <ellipse/>
+  </object>
+  <object x="1672.73" y="1612.12" width="9.09091" height="3.0303">
+   <ellipse/>
+  </object>
+  <object x="1478.79" y="1739.39" width="12.1212" height="6.06061">
+   <ellipse/>
+  </object>
  </objectgroup>
 </map>

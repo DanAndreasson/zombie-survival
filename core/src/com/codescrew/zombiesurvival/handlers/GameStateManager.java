@@ -15,9 +15,9 @@ public class GameStateManager {
 
     private Stack<GameState> gameStates;
 
-    public static final int MENU = 83774392;
-    public static final int PLAY = 388031654;
-    public static final int LEVEL_SELECT = -9238732;
+    public static final int MENU = 1;
+    public static final int PLAY = 2;
+    public static final int LEVEL_SELECT = 3;
 
     public GameStateManager(Game game) {
         this.game = game;

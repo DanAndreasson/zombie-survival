@@ -35,6 +35,8 @@ public class HUD {
 
     }
 
+
+
     public void render(SpriteBatch sb) {
 
         sb.begin();

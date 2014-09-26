@@ -2,9 +2,6 @@ package com.codescrew.zombiesurvival.handlers;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-/**
- * Created by raimat on 2014-09-09.
- */
 public class Animation {
 
     private TextureRegion[] frames;
@@ -29,15 +26,20 @@ public class Animation {
 
     public void setDelay(float f) { delay = f; }
     public void setCurrentFrame(int i) { if(i < frames.length) currentFrame = i; }
-    public void setFrames(TextureRegion[] frames) {
-        setFrames(frames, 1 / 12f);
+    public boolean setFrames(TextureRegion[] frames) {
+        if (frames != this.frames) {
+            this.frames = frames;
+            return true;
+        }
+        return false;
     }
     public void setFrames(TextureRegion[] frames, float delay) {
-        this.frames = frames;
-        time = 0;
-        currentFrame = 0;
-        timesPlayed = 0;
         this.delay = delay;
+        if (setFrames(frames)) {
+            time = 0;
+            currentFrame = 0;
+            timesPlayed = 0;
+        }
     }
 
     public void update(float dt) {
@@ -60,5 +62,10 @@ public class Animation {
     public TextureRegion getFrame() { return frames[currentFrame]; }
     public int getTimesPlayed() { return timesPlayed; }
     public boolean hasPlayedOnce() { return timesPlayed > 0; }
+
+    public void flipFrames(){
+        for (TextureRegion r : frames)
+            r.flip(true, false);
+    }
 
 }

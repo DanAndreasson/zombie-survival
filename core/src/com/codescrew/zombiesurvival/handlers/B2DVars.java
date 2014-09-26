@@ -1,8 +1,6 @@
 package com.codescrew.zombiesurvival.handlers;
 
-/**
- * Created by raimat on 2014-09-09.
- */
+
 public class B2DVars {
     // pixels per meter
     public static final float PPM = 100;
