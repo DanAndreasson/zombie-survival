@@ -1,6 +1,7 @@
 package com.codescrew.zombiesurvival.states;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.codescrew.zombiesurvival.handlers.Content;
 import com.codescrew.zombiesurvival.handlers.GameButton;
 import com.codescrew.zombiesurvival.handlers.GameStateManager;
 import com.codescrew.zombiesurvival.main.Game;
@@ -53,7 +54,7 @@ public class LevelSelect extends GameState {
                 buttons[row][col].update(dt);
                 if(buttons[row][col].isClicked()) {
                     Play.level = row * buttons[0].length + col + 1;
-                    Game.res.getSound("levelselect").play();
+                    Game.res.getSound("levelselect").play(Content.SFX_VOL);
                     gsm.setState(GameStateManager.PLAY);
                 }
             }

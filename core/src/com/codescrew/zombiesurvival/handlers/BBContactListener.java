@@ -34,13 +34,8 @@ public class BBContactListener implements ContactListener {
         if(fa == null || fb == null) return;
 
 
-
-        if (oneFixtureIs(fa, fb, "spike"))
-            Gdx.app.log(TAG, "Found a spike");
-
         if (oneFixtureIs(fa, fb, "foot") && oneFixtureIs(fa, fb, "spike" )){
             playerDead = true;
-            Gdx.app.log(TAG, "AJAJ FOTEN. SPIK");
         }
 
         if (oneFixtureIs(fa, fb, "foot") && oneFixtureIs(fa, fb, "solid" )){
@@ -48,7 +43,6 @@ public class BBContactListener implements ContactListener {
         }
 
         if(oneFixtureIs(fa, fb, "brain" ) && oneFixtureIs(fa, fb, "foot")) {
-            Gdx.app.log(TAG, "Brain collected!");
             Fixture brain = fa;
             if (fixtureIs(fb, "brain")) brain = fb;
             bodiesToRemove.add(brain.getBody());

@@ -34,6 +34,7 @@ import com.codescrew.zombiesurvival.handlers.BBContactListener;
 import com.codescrew.zombiesurvival.handlers.BBInput;
 import com.codescrew.zombiesurvival.handlers.Background;
 import com.codescrew.zombiesurvival.handlers.BoundedCamera;
+import com.codescrew.zombiesurvival.handlers.Content;
 import com.codescrew.zombiesurvival.handlers.GameStateManager;
 import com.codescrew.zombiesurvival.main.Game;
 
@@ -41,7 +42,7 @@ import com.codescrew.zombiesurvival.main.Game;
 public class Play extends GameState {
 
     private static final String TAG = "Play";
-    private boolean debug = true;
+    private boolean debug = false;
 
     private World world;
     private Box2DDebugRenderer b2dRenderer;
@@ -49,6 +50,7 @@ public class Play extends GameState {
     private BoundedCamera b2dCam;
 
     private Player player;
+    private static Player lastPlayer;
 
     private TiledMap tileMap;
     private int tileMapWidth;
@@ -106,6 +108,8 @@ public class Play extends GameState {
         b2dCam.setToOrtho(false, (Game.V_WIDTH / PPM) * 2, (Game.V_HEIGHT / PPM) * 2);
         b2dCam.setBounds(0, (tileMapWidth * tileSize) / PPM, 0, (tileMapHeight * tileSize) / PPM);
 
+        Game.res.getSound("start").play(Content.SFX_VOL);
+
     }
 
     /**
@@ -135,7 +139,7 @@ public class Play extends GameState {
 
         // create box shape for player collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(14 / PPM, 20 / PPM);
+        shape.setAsBox(12 / PPM, 20 / PPM);
 
         // create fixturedef for player collision box
         FixtureDef fdef = new FixtureDef();
@@ -151,7 +155,7 @@ public class Play extends GameState {
 
         // create box shape for player foot
         shape = new PolygonShape();
-        shape.setAsBox(14 / PPM, 10 / PPM, new Vector2(0, -10 / PPM), 0);
+        shape.setAsBox(12 / PPM, 10 / PPM, new Vector2(0, -10 / PPM), 0);
 
         // create fixturedef for player foot
         fdef.shape = shape;
@@ -174,6 +178,10 @@ public class Play extends GameState {
 
     }
 
+    public static Player getPlayer(){
+        return lastPlayer;
+    }
+
     /**
      * Sets up the tile map collidable tiles.
      * Reads in tile map layers and sets up box2d bodies.
@@ -193,7 +201,6 @@ public class Play extends GameState {
         tileSize = (Integer) tileMap.getProperties().get("tilewidth");
         tmRenderer = new OrthogonalTiledMapRenderer(tileMap);
 
-        // read each of the "red" "green" and "blue" layers
         TiledMapTileLayer layer;
         layer = (TiledMapTileLayer) tileMap.getLayers().get("blocks");
         createBlocks(layer, B2DVars.BIT_WALKABLE_BLOCK);
@@ -244,29 +251,25 @@ public class Play extends GameState {
     }
 
     /**
-     * Set up box2d bodies for crystals in tile map "crystals" layer
+     * Set up box2d bodies for crystals in tile map "brains" layer
      */
     private void createBrains() {
 
-        // create list of crystals
         brains = new Array<Brain>();
 
-        // get all crystals in "crystals" layer,
-        // create bodies for each, and add them
-        // to the crystals list
         MapLayer ml = tileMap.getLayers().get("brains");
         if(ml == null) return;
 
         for(MapObject mo : ml.getObjects()) {
             BodyDef cdef = new BodyDef();
             cdef.type = BodyDef.BodyType.StaticBody;
-            float x = (Float) mo.getProperties().get("x") / PPM;
-            float y = (Float) mo.getProperties().get("y") / PPM;
+            float x = ((Float) mo.getProperties().get("x")+(tileSize/2)) / PPM;
+            float y = ((Float) mo.getProperties().get("y")+(tileSize/2)) / PPM;
             cdef.position.set(x, y);
             Body body = world.createBody(cdef);
             FixtureDef cfdef = new FixtureDef();
             CircleShape cshape = new CircleShape();
-            cshape.setRadius(8 / PPM);
+            cshape.setRadius(16 / PPM);
             cfdef.shape = cshape;
             cfdef.isSensor = true;
             cfdef.filter.categoryBits = B2DVars.BIT_BRAIN;
@@ -292,13 +295,17 @@ public class Play extends GameState {
         for(MapObject mo : ml.getObjects()) {
             BodyDef cdef = new BodyDef();
             cdef.type = BodyDef.BodyType.StaticBody;
-            float x = (Float) mo.getProperties().get("x") / PPM;
-            float y = (Float) mo.getProperties().get("y") / PPM;
+            float tiledX = ((Float) mo.getProperties().get("x") + 8) / PPM;
+            float tiledY = ((Float) mo.getProperties().get("y") - 8) / PPM;
+            float x = tiledX % (tileSize/PPM);
+            float y = tiledY % (tileSize/PPM);
+            x = tiledX - x + (tileSize/PPM/2);
+            y = 2*(tileSize/PPM) - y + tiledY - (tileSize/PPM/2);
             cdef.position.set(x, y);
             Body body = world.createBody(cdef);
             FixtureDef cfdef = new FixtureDef();
             CircleShape cshape = new CircleShape();
-            cshape.setRadius(5 / PPM);
+            cshape.setRadius(16 / PPM);
             cfdef.shape = cshape;
             cfdef.isSensor = true;
             cfdef.filter.categoryBits = B2DVars.BIT_SPIKE;
@@ -346,9 +353,12 @@ public class Play extends GameState {
             brains.removeValue((Brain) b.getUserData(), true);
             world.destroyBody(bodies.get(i));
             player.collectBrain();
-//            Game.res.getSound("brain").play();
+           Game.res.getSound("eat").play(Content.SFX_VOL);
         }
         bodies.clear();
+
+        for (Spike spike : spikes)
+            spike.update(dt);
 
 
 
@@ -373,24 +383,21 @@ public class Play extends GameState {
 
         // check player win
         if (player.getBody().getPosition().x * PPM > tileMapWidth * tileSize) {
-            Game.res.getSound("levelselect").play();
+            Game.res.getSound("levelselect").play(Content.SFX_VOL);
             gsm.setState(GameStateManager.LEVEL_SELECT);
         }
 
-        // check player failed
-        if (player.getBody().getPosition().y < 0) {
-            Game.res.getSound("hit").play();
-            gsm.setState(GameStateManager.MENU);
-        }
+        // Player is below the map..
+        if (player.getBody().getPosition().y < 0)
+            gameOver();
+        if (cl.isPlayerDead())
+            gameOver();
+    }
 
-
-        if (cl.isPlayerDead()) {
-            Game.res.getSound("hit").play();
-            gsm.setState(GameStateManager.MENU);
-        }
-
-
-
+    public void gameOver(){
+        Game.res.getSound("dead").play(Content.SFX_VOL);
+        lastPlayer = player;
+        gsm.setState(GameStateManager.SCORE);
     }
 
     public void render() {

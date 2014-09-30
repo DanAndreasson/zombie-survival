@@ -6,6 +6,7 @@ import com.codescrew.zombiesurvival.states.GameState;
 import com.codescrew.zombiesurvival.states.LevelSelect;
 import com.codescrew.zombiesurvival.states.Play;
 import com.codescrew.zombiesurvival.states.Menu;
+import com.codescrew.zombiesurvival.states.ScoreState;
 
 import java.util.Stack;
 
@@ -18,6 +19,7 @@ public class GameStateManager {
     public static final int MENU = 1;
     public static final int PLAY = 2;
     public static final int LEVEL_SELECT = 3;
+    public static final int SCORE = 4;
 
     public GameStateManager(Game game) {
         this.game = game;
@@ -36,10 +38,18 @@ public class GameStateManager {
     public Game game() { return game; }
 
     private GameState getState(int state) {
-        if(state == MENU) return new Menu(this);
-        if(state == PLAY) return new Play(this);
-        if(state == LEVEL_SELECT) return new LevelSelect(this);
-        return null;
+        switch (state){
+            case MENU:
+                return new Menu(this);
+            case PLAY:
+                return new Play(this);
+            case LEVEL_SELECT:
+                return new LevelSelect(this);
+            case SCORE:
+                return new ScoreState(this);
+            default:
+                return null;
+        }
     }
 
     public void setState(int state) {

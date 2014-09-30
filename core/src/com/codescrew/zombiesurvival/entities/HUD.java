@@ -25,14 +25,16 @@ public class HUD {
         Texture brainTex = Game.res.getTexture("score-brain");
         brain = new TextureRegion(brainTex, 0, 0, 100, 69);
 
-        font = new TextureRegion[11];
-        for(int i = 0; i < 6; i++) {
-            font[i] = new TextureRegion(tex, 32 + i * 9, 16, 9, 9);
-        }
-        for(int i = 0; i < 5; i++) {
-            font[i + 6] = new TextureRegion(tex, 32 + i * 9, 25, 9, 9);
-        }
+        setBigFont();
 
+    }
+
+    private void setBigFont(){
+        Texture tex = Game.res.getTexture("bigfont");
+        font = new TextureRegion[11];
+        for(int i = 0; i < font.length; i++) {
+            font[i] = new TextureRegion(tex, i * 16, 0, 16, 20);
+        }
     }
 
 

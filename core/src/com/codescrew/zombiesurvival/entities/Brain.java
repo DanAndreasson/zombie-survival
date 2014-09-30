@@ -17,9 +17,6 @@ public class Brain extends B2DSprite{
             sprites[i] = new TextureRegion(tex, i * 32, 0, 32, 22);
         }
 
-        animation.setFrames(sprites, 1 / 12f);
-
-        width = sprites[0].getRegionWidth();
-        height = sprites[0].getRegionHeight();
+        setAnimation(sprites, 1 / 12f);
     }
 }

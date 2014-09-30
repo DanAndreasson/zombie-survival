@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.codescrew.zombiesurvival.handlers.Content;
 import com.codescrew.zombiesurvival.main.Game;
 
 public class Player extends B2DSprite {
@@ -44,10 +45,6 @@ public class Player extends B2DSprite {
         initZombieAirSprites();
 
         setAnimation(zombieWalkSprites, 1 / 12f);
-
-        width = zombieWalkSprites[0].getRegionWidth();
-        height = zombieWalkSprites[0].getRegionHeight();
-
 
     }
 
@@ -89,7 +86,7 @@ public class Player extends B2DSprite {
         setYVelocity(JUMP_SPEED);
         applyGravity();
 
-        Game.res.getSound("jump").play();
+        Game.res.getSound("jump").play(Content.SFX_VOL);
     }
 
     public void wallJump() {
@@ -104,7 +101,7 @@ public class Player extends B2DSprite {
         setYVelocity(WALLJUMP_Y_SPEED);
         setXVelocity(velocity);
 
-        Game.res.getSound("jump").play();
+        Game.res.getSound("walljump").play(Content.SFX_VOL);
     }
 
     public float getLastDirection() { return lastDirection; }

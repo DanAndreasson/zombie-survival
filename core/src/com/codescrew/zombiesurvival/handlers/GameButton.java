@@ -61,9 +61,8 @@ public class GameButton {
         Texture tex = Game.res.getTexture("bigfont");
         font = new TextureRegion[10];
         for(int i = 0; i < font.length; i++) {
-            font[i] = new TextureRegion(tex, i * 16, 0, 16, 19);
+            font[i] = new TextureRegion(tex, i * 16, 0, 16, 20);
         }
-
     }
 
     public boolean isClicked() { return clicked; }

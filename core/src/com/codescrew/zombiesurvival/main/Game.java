@@ -41,22 +41,25 @@ public class Game extends ApplicationAdapter {
         res.loadTexture("images/zombie.png");
         res.loadTexture("images/brain.png");
         res.loadTexture("images/score-brain.png");
-        res.loadTexture("images/spikes.png");
         res.loadTexture("images/tombstone.png");
         res.loadTexture("images/bigfont.png");
         res.loadTexture("images/zombie-air.png");
-        res.loadTexture("maps/spike.png");
+        res.loadTexture("images/spike.png");
+        res.loadTexture("images/game-over.png");
+        res.loadTexture("images/scoremenu.png");
 
         res.loadSound("sfx/jump.wav");
-        res.loadSound("sfx/crystal.wav");
+        res.loadSound("sfx/start.wav");
+        res.loadSound("sfx/walljump.wav");
+        res.loadSound("sfx/eat.mp3");
         res.loadSound("sfx/levelselect.wav");
-        res.loadSound("sfx/hit.wav");
-        res.loadSound("sfx/changeblock.wav");
+        res.loadSound("sfx/dead.wav");
 
-        res.loadMusic("music/bbsong.ogg");
-        res.getMusic("bbsong").setLooping(true);
-        res.getMusic("bbsong").setVolume(0.5f);
-        res.getMusic("bbsong").play();
+
+        res.loadMusic("music/theme.wav");
+        res.getMusic("theme").setLooping(true);
+        res.getMusic("theme").setVolume(0.5f);
+        res.getMusic("theme").play();
 
         cam = new BoundedCamera();
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
