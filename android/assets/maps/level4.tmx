@@ -1,130 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="65" height="8" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="blocks" tilewidth="32" tileheight="32">
-  <image source="blocks.png" width="96" height="32"/>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" backgroundcolor="#74c8ff">
+ <tileset firstgid="1" name="sprites" tilewidth="32" tileheight="32">
+  <image source="sprites.png" width="96" height="160"/>
+  <terraintypes>
+   <terrain name="New Terrain" tile="-1"/>
+  </terraintypes>
  </tileset>
- <layer name="red" width="65" height="8">
+ <tileset firstgid="16" name="spike" tilewidth="32" tileheight="32">
+  <image source="../images/spike.png" width="128" height="32"/>
+ </tileset>
+ <tileset firstgid="20" name="brain-tiled" tilewidth="32" tileheight="32">
+  <image source="../images/brain-tiled.png" width="32" height="32"/>
+ </tileset>
+ <layer name="blocks" width="128" height="64">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjILhARiheBRQBzAykBemjFgwsepG42/wAAAm9AAR
+   eJzt2u1qgzAUgGH/DN3Eev93OwYtSIiasqg153ng0HRVkb1ou4+uAwAAAAAAACCq+eoT4FL6x1ba//vQs+Aqe/1fr/dHnwiX0D82/WPTP7Y5s859Tf826R9b7v6vfxylP//r36Z5ZVL6x6E/L97/Y9O/LSWf99z/26V/bO/+vd/9vy36x7bsP7yx3xH9/e/R+Zbf87Fgm5ca/dPj6n++K/unx9b/fCX917avTf9rlfSnXfq35WtlhpXnw8asHavmUNeYzCMzY2ad7vP3+POcx/NxyqynxbbTYsaN9bhYE1ff+Z1SZCX9+5U195frv/Vc/7bs9U9f178tub41+/t88dmO7s9nO6K/a/4+XP+x7V2rpf1d8/dUqz/31BfO1r7c13/6c3/6x1Ha+ogBAAAAaMkvQWIKXQ==
   </data>
  </layer>
- <layer name="green" width="65" height="8">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFo4B0wISER8EoIAbQMq2gp8WhnDbxuXs0340CegIAYPAAGQ==
-  </data>
- </layer>
- <layer name="blue" width="65" height="8">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFo2DkAWYkPNgAPdxGjtnUdBe1/EauewZjvNMTjFT/D+Z8PxgBAMi8ADc=
-  </data>
- </layer>
- <objectgroup name="crystals" width="65" height="8">
-  <object x="239" y="114">
-   <ellipse/>
-  </object>
-  <object x="400" y="49">
-   <ellipse/>
-  </object>
-  <object x="303" y="113">
-   <ellipse/>
-  </object>
-  <object x="145" y="177">
-   <ellipse/>
-  </object>
-  <object x="913" y="177">
-   <ellipse/>
-  </object>
-  <object x="944" y="176">
-   <ellipse/>
-  </object>
-  <object x="1189" y="45">
-   <ellipse/>
-  </object>
-  <object x="1214" y="20">
-   <ellipse/>
-  </object>
-  <object x="1238" y="48">
-   <ellipse/>
-  </object>
-  <object x="1256" y="104">
-   <ellipse/>
-  </object>
-  <object x="1472" y="113">
-   <ellipse/>
-  </object>
-  <object x="1536" y="111">
-   <ellipse/>
-  </object>
-  <object x="1599" y="110">
-   <ellipse/>
-  </object>
+ <objectgroup name="brains">
+  <object gid="20" x="349" y="1214"/>
+  <object gid="20" x="320" y="1150"/>
+  <object gid="20" x="351" y="1250"/>
+  <object gid="20" x="383" y="1053"/>
+  <object gid="20" x="639" y="1215"/>
+  <object gid="20" x="604" y="1156"/>
+  <object gid="20" x="638" y="1055"/>
+  <object gid="20" x="600" y="996"/>
+  <object gid="20" x="641" y="931"/>
+  <object gid="20" x="605" y="861"/>
+  <object gid="20" x="640" y="773"/>
+  <object gid="20" x="598" y="734"/>
+  <object gid="20" x="450" y="763"/>
+  <object gid="20" x="475" y="770"/>
+  <object gid="20" x="452" y="800"/>
+  <object gid="20" x="453" y="830"/>
+  <object gid="20" x="543" y="766"/>
+  <object gid="20" x="703" y="573"/>
+  <object gid="20" x="863" y="1276"/>
+  <object gid="20" x="930" y="1242"/>
+  <object gid="20" x="994" y="1279"/>
+  <object gid="20" x="1055" y="1245"/>
+  <object gid="20" x="1079" y="1246"/>
+  <object gid="20" x="1125" y="1277"/>
+  <object gid="20" x="1154" y="1280"/>
+  <object gid="20" x="1270" y="1245"/>
+  <object gid="20" x="1316" y="1149"/>
+  <object gid="20" x="1410" y="1342"/>
+  <object gid="20" x="1635" y="1440"/>
+  <object gid="20" x="1604" y="1659"/>
+  <object gid="20" x="1439" y="1565"/>
+  <object gid="20" x="1437" y="1533"/>
+  <object gid="20" x="1444" y="1595"/>
+  <object gid="20" x="1475" y="1595"/>
+  <object gid="20" x="1734" y="1503"/>
+  <object gid="20" x="1732" y="1542"/>
+  <object gid="20" x="1689" y="1569"/>
+  <object gid="20" x="1691" y="1596"/>
+  <object gid="20" x="1697" y="1640"/>
+  <object gid="20" x="1789" y="1758"/>
+  <object gid="20" x="1887" y="1668"/>
+  <object gid="20" x="1857" y="1667"/>
+  <object gid="20" x="1957" y="1603"/>
+  <object gid="20" x="1984" y="1598"/>
+  <object gid="20" x="1982" y="1570"/>
+  <object gid="20" x="2047" y="1534"/>
+  <object gid="20" x="2083" y="1537"/>
+  <object gid="20" x="2075" y="1509"/>
+  <object gid="20" x="2055" y="1509"/>
+  <object gid="20" x="2147" y="1470"/>
+  <object gid="20" x="2171" y="1470"/>
+  <object gid="20" x="2175" y="1440"/>
+  <object gid="20" x="2138" y="1436"/>
+  <object gid="20" x="2200" y="1441"/>
+  <object gid="20" x="2306" y="1535"/>
+  <object gid="20" x="2338" y="1533"/>
+  <object gid="20" x="2338" y="1508"/>
+  <object gid="20" x="2299" y="1495"/>
  </objectgroup>
- <objectgroup name="spikes" width="65" height="8">
-  <object x="466" y="49">
-   <ellipse/>
-  </object>
-  <object x="563" y="16">
-   <ellipse/>
-  </object>
-  <object x="562" y="50">
-   <ellipse/>
-  </object>
-  <object x="563" y="80">
-   <ellipse/>
-  </object>
-  <object x="562" y="113">
-   <ellipse/>
-  </object>
-  <object x="560" y="146">
-   <ellipse/>
-  </object>
-  <object x="881" y="81">
-   <ellipse/>
-  </object>
-  <object x="881" y="114">
-   <ellipse/>
-  </object>
-  <object x="1360" y="210">
-   <ellipse/>
-  </object>
-  <object x="1391" y="209">
-   <ellipse/>
-  </object>
-  <object x="1423" y="209">
-   <ellipse/>
-  </object>
-  <object x="1456" y="207">
-   <ellipse/>
-  </object>
-  <object x="1486" y="207">
-   <ellipse/>
-  </object>
-  <object x="1518" y="208">
-   <ellipse/>
-  </object>
-  <object x="1552" y="207">
-   <ellipse/>
-  </object>
-  <object x="1583" y="208">
-   <ellipse/>
-  </object>
-  <object x="1617" y="205">
-   <ellipse/>
-  </object>
-  <object x="1650" y="209">
-   <ellipse/>
-  </object>
-  <object x="1680" y="207">
-   <ellipse/>
-  </object>
-  <object x="1713" y="206">
-   <ellipse/>
-  </object>
-  <object x="2065" y="81">
-   <ellipse/>
-  </object>
-  <object x="2033" y="81">
-   <ellipse/>
-  </object>
+ <objectgroup name="spawn">
+  <object x="4" y="1217" width="23" height="27"/>
+ </objectgroup>
+ <objectgroup name="spikes">
+  <object gid="16" x="924" y="1279"/>
+  <object gid="16" x="702" y="1087"/>
+  <object gid="16" x="383" y="1086"/>
+  <object gid="16" x="990" y="1214"/>
+  <object gid="16" x="1061" y="1280"/>
+  <object gid="16" x="1153" y="1218"/>
+  <object gid="16" x="1282" y="1185"/>
+  <object gid="16" x="1250" y="1281"/>
+  <object gid="16" x="1439" y="1631"/>
+  <object gid="16" x="1733" y="1598"/>
+  <object gid="16" x="1922" y="1694"/>
+  <object gid="16" x="2018" y="1632"/>
+  <object gid="16" x="2110" y="1568"/>
+  <object gid="16" x="2207" y="1508"/>
+  <object gid="16" x="2240" y="1505"/>
  </objectgroup>
 </map>

@@ -37,7 +37,6 @@ public class Game extends ApplicationAdapter {
         res.loadTexture("images/menu.png");
         res.loadTexture("images/title.png");
         res.loadTexture("images/bgs.png");
-        res.loadTexture("images/hud.png");
         res.loadTexture("images/zombie.png");
         res.loadTexture("images/brain.png");
         res.loadTexture("images/score-brain.png");

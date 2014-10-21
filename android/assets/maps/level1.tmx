@@ -1,43 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="32" tileheight="32" backgroundcolor="#74c8ff">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="sprites" tilewidth="32" tileheight="32">
   <image source="sprites.png" width="96" height="160"/>
  </tileset>
  <layer name="blocks" width="32" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYBg6gH/U/lH7B4n9/EiYGD4t7Kc3GLWf+vbzouFR+4kD9LIflz3Usp8FDbPTGQMAk3wDZw==
+   eJxjYBgFo2AUjALcgJ/OetH14DODkPmE5DkGGI+CUTCQAAD/yQFb
   </data>
  </layer>
  <objectgroup name="brains">
-  <object x="271" y="397"/>
-  <object x="428" y="426"/>
-  <object x="397" y="333"/>
-  <object x="434" y="268"/>
-  <object x="393" y="205"/>
-  <object x="465" y="170"/>
-  <object x="616" y="168"/>
-  <object x="779" y="169"/>
-  <object x="879" y="170"/>
-  <object x="903" y="165"/>
-  <object x="880" y="138" width="1"/>
-  <object x="907" y="149"/>
+  <object x="175" y="275">
+   <ellipse/>
+  </object>
+  <object x="301" y="240">
+   <ellipse/>
+  </object>
+  <object x="495" y="305">
+   <ellipse/>
+  </object>
+  <object x="688" y="307">
+   <ellipse/>
+  </object>
  </objectgroup>
  <objectgroup name="spawn">
-  <object x="14" y="302"/>
+  <object x="12" y="242">
+   <ellipse/>
+  </object>
  </objectgroup>
- <objectgroup name="spikes">
-  <object x="496" y="463"/>
-  <object x="526" y="466"/>
-  <object x="556" y="465"/>
-  <object x="591" y="465"/>
-  <object x="622" y="465"/>
-  <object x="653" y="466"/>
-  <object x="685" y="467"/>
-  <object x="718" y="467"/>
-  <object x="754" y="466" width="1"/>
-  <object x="559" y="209"/>
-  <object x="685" y="210"/>
-  <object x="816" y="209"/>
-  <object x="850" y="210"/>
- </objectgroup>
+ <objectgroup name="spikes"/>
 </map>
